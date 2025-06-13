@@ -9,11 +9,10 @@
 # Eric Lease Morgan <eric_morgan@infomotions.com>
 # (c) Infomotions, LLC; distributred under a GNU Public License
 
-# May  16, 2025 - with a lack of hearing, a FOC, and because the CRC machines were under maintence
-# May  17, 2025 - migrated to Euclidian (VEC_DISTANCE_L2) distances
-# May  30, 2025 - added cache; tomorrow is my last day here at Notre Dame, yikes!
-# June  6, 2025 - calling it my own; added a bit of documentation
-# June 13, 2025 - added additional caches
+# May 16, 2025 - with a lack of hearing, a FOC, and because the CRC machines were under maintence
+# May 17, 2025 - migrated to Euclidian (VEC_DISTANCE_L2) distances
+# May 30, 2025 - added cache; tomorrow is my last day here at Notre Dame, yikes!
+# June 6, 2025 - calling it my own; added a bit of documentation
 
 
 # configure
@@ -25,7 +24,6 @@ COLUMNS       = [ 'titles', 'items', 'sentences', 'distances' ]
 CACHEDRESULTS = './etc/cached-results.txt'
 CACHEDCARREL  = './etc/cached-carrel.txt'
 CACHEDQUERY   = './etc/cached-query.txt'
-CACHEDCITES   = './etc/cached-cites.txt'
 
 # require
 from pandas                import DataFrame
@@ -56,9 +54,6 @@ database.enable_load_extension( True )
 load( database )
 
 # save the cache for other possible processes, and done
-with open( CACHEDCARREL, 'w' ) as handle : handle.write( carrel )
-
-# save the cache for other possible processes, and done
 with open( CACHEDQUERY, 'w' ) as handle : handle.write( query )
 
 # vectorize query and search; get a set of matching records
@@ -76,30 +71,24 @@ for record in records :
 	distance = record[ 3 ]
 	
 	# update
-	sentences.append( [title, item, sentence, distance ] )
+	sentences.append( [title, item, sentence, distance, ] )
 
 # create a dataframe of the sentences and sort by title
 sentences = DataFrame( sentences, columns=COLUMNS )
 sentences = sentences.sort_values( [ 'titles', 'items' ] )
+sentences = list( sentences[ 'sentences' ] )
 
 # process/output each sentence; along the way, create a cache
 results = []
-cites   = []
-for index, result in sentences.iterrows() :
+for sentence in sentences :
 
-	# parse
-	title    = result[ 'titles' ]
-	item     = result[ 'items' ]
-	sentence = result[ 'sentences' ]
-	
-	# update the caches
-	results.append( sentence )
-	cites.append( '\t'.join( [ title, str( item ) ] ) )
-
-	# output
+	# output and update
 	print( sentence )
-	
-# save the remaining caches and done
-with open( CACHEDCITES, 'w' )   as handle : handle.write( '\n'.join( cites ) )
+	results.append( sentence )
+
+# save the cache for other possible processes, and done
+with open( CACHEDCARREL, 'w' ) as handle : handle.write( carrel )
+
+# save the cache for other possible processes, and done
 with open( CACHEDRESULTS, 'w' ) as handle : handle.write( '\n'.join( results ) )
 exit()
