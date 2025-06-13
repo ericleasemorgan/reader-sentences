@@ -11,7 +11,7 @@
 # configure
 MODEL   = 'llama2'
 CONTEXT = './etc/cached-results.txt'
-PROMPT  = 'First consider the following context: %s  Second, in a few short sentences, address the following question: %s'
+PROMPT  = 'In a few short short sentences, address the question %s using the following context: %s'
 
 # require
 from ollama import generate
@@ -23,7 +23,7 @@ question = argv[ 1 ]
 
 # initialize
 context = open( CONTEXT ).read()
-prompt  = ( PROMPT % ( context, question ))
+prompt  = ( PROMPT % ( question, context ))
 
 # submit the work, output, and done
 result = generate( MODEL, prompt )
