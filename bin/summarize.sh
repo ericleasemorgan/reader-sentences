@@ -13,6 +13,7 @@ SUMMARIZE='./bin/summarize.py'
 
 # gussy up the output a bit; sometimes fmt gets in the way
 echo
+echo
 $SUMMARIZE | fmt
 echo
 

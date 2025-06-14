@@ -19,6 +19,7 @@ QUERY=$1
 
 # gussy up the output a bit
 echo
+echo
 $ELABORATE "$QUERY" | fmt
 echo
 

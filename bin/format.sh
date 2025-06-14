@@ -13,6 +13,7 @@ FORMAT='./bin/format.py'
 
 # gussy up the output a bit
 echo
+echo
 $FORMAT | fmt
 echo
 
