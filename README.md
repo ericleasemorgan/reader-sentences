@@ -49,7 +49,7 @@ Then you will need to create and/or download at least one Distant Reader study c
 
 	rdr download author-homer-gutenberg
 
-Next, you will need to install these scripts:
+Next, you will need to install Reader Sentences scripts:
 
     git pull https://github.com/ericleasemorgan/reader-sentences.git
 
@@ -61,19 +61,19 @@ Now, read and cache all the sentences in a given study carrel:
 
 	./bin/carrel2sentences.py author-homer-gutenberg
 
-At the is stage, it is quite likely there will be missing Python modules. Do you best to install them.
+At this stage, it is quite likely there will be missing Python modules. Do you best to install them.
 
 The next step is to vectorize ("index") the sentences:
 
 	./bin/vectorize.py author-homer-gutenberg
 	
-Again, it is quite likely you will have missing Python modules and/or you will have missing HuggingFace models. Do your best to install the modules. To resolve the issues with the HuggingFace model, create a HuggingFace account, get a HuggingFace token, and create an environment variable with the name "HF_TOKEN" with the token's value. Repeat the previous step, and please be patient; this step is computationally expensive.
+Again, it is quite likely you will have missing Python modules and/or you will have missing HuggingFace models. Do your best to install the modules. To resolve the issues with the HuggingFace models, create a HuggingFace account, get a HuggingFace token, and create an environment variable with the name "HF_TOKEN" with the token's value. Repeat the previous step, and please be patient; this step is computationally expensive.
 
-Once you get this far, you can query the database of sentences. The following command queries the study carrel named "author-homer-gutenberg" for the word "hector" and returns thirty-two sentences:
+Once you get this far, you can query the database of vectorized sentences. The following command queries the study carrel named "author-homer-gutenberg" for the word "hector" and returns thirty-two sentences:
 
 	./bin/search.sh author-homer-gutenberg hector 32
 
-The result ought be a paragraph thirty-two sentences long. Each sentece ought to allude to Hector in some way, shape, or form.
+The result ought be a long paragraph thirty-two sentences in length. Each sentece ought to allude to Hector in some way, shape, or form.
 
 One way to make more sense of the long paragraph is to divide it into smaller paragraphs, like this:
 
@@ -92,6 +92,56 @@ Finally, you can use the following command to actually submit a question to be a
 	
 Usage
 -----
+
+This suite of software is made up many little Python scripts and Bash front-ends. Listed below are each of the scripts and a brief description of what they do:
+
+* `./bin/carrel2sentences.py` - given the name of study carrel, extract and cache each of the sentences in each of the carrel's items
+
+* `./bin/vectorize.py` - given the name of a study carrel, vectorize ("index") the cached sentences
+
+* `./bin/search.py` - given a study carrel, a query, and an integer (N), search the carrel's database and returns N sentences while simultaneously caching the results in the ./etc directory
+
+* `./bin/search.sh` - a front-end to ./bin/search.py; simply reformats the results into a single paragraph
+
+* `./bin/format.py` - takes the cached result of ./bin/search.py, compares each sentence to it's subsequent sentence, and (usually) outputs many smaller paragraphs instead of just one
+
+* `./bin/format.sh` - a front-end to ./bin/search.py; simply reformats the results to include a few blank lines for readability
+
+* `./bin/summarize.py` - takes the cached result of ./bin/search.py, and uses a large-language model to summarize the cache
+
+* `./bin/elaborate.py` - given a query in the form of a question, uses the cached result of `./bin/search.py` to address the given question; as such, this script is a simple implemenation of a retrieval-augmented generation (RAG) application
+
+* `./bin/elaborate.sh` - a front-end to ./bin/elaborate.py; simply adds a few blank lines to the output for readability purposes
+
+* `./bin/concordance.sh`
+
+* `./bin/define.py`
+
+* `./bin/markov2sentences.py`
+
+* `./bin/pose-a-question.py`
+
+* `./bin/search-with-entities.sh`
+
+* `./bin/search-with-keywords.sh`
+
+* `./bin/search-with-lexicon.sh`
+
+* `./bin/search-with-modals.sh`
+
+* `./bin/search-with-nouns.sh`
+
+* `./bin/search-with-semantics.sh`
+
+* ./bin/search-with-unigrams.sh
+
+* ./bin/search-with-verb.py
+
+* ./bin/search-with-verb.sh
+
+* ./bin/tell-a-story.py
+
+* ./bin/tell-a-story.sh
 
 
 Case study
