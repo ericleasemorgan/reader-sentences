@@ -38,10 +38,10 @@ only be realized through face-to-face encounters with others.
 Think of this system as a tool to suppliment your reading. Create a collection of texts, index (model) the collection, search the index, interact with the model, and in the end, garner a better understanding of the collection. Think of the whole process as a sort of interactive discussion with a book. As such, this system implemements a form of reading. 
 
 
-Requirements
-------------
+(Not So) Quick Start
+--------------------
 
-There are many. First, you will need to install the Distant Reader Toolbox:
+First, you will need to install the Distant Reader Toolbox:
 
     pip install reader-toolbox
 
@@ -52,7 +52,44 @@ Then you will need to create and/or download at least one Distant Reader study c
 Next, you will need to install these scripts:
 
     git pull https://github.com/ericleasemorgan/reader-sentences.git
-    
+
+Change directories to the just downloaded repository:
+
+	cd reader-sentences
+
+Now, read and cache all the sentences in a given study carrel:
+
+	./bin/carrel2sentences.py author-homer-gutenberg
+
+At the is stage, it is quite likely will have missing Python modules. Do you best to install them.
+
+The next step is vectorized ("index") the sentences:
+
+	./bin/vectorize.py author-homer-gutenberg
+	
+Again, it is quite likely you will have missing Python modules and/or you will have missing HuggingFace models. Do your best to install the modules. To resolve the issues with HuggingFace model, create a HuggingFace account, get a HuggingFace token, and create an environment variable with the name "HF_TOKEN" with the token's value. Repeat the previous step. Please be patient; this step is computationally expensive.
+
+Once you get this far, you can query the database of sentences. The following command queries the study carrel named "author-homer-gutenberg" for the word "hector" and returns thirty-two sentences:
+
+	./bin/search.sh author-homer-gutenberg hector 32
+
+The result ought be a paragraph sixteen sentences long. Each sentece ought to allude to Hector in some way, shape, or form.
+
+One way to make more sense of the long paragraph is to divide into smaller paragraphs, like this:
+
+	./bin/format.sh
+
+Another way to make more sense of the long paragarph is to use a large-langauge model to summarize it:
+
+	./bin/summarize.sh
+
+The previous step requires the installation of Ollama and a large-language model called "Llama2". Alas?
+
+Finally, you can use the following command to actually submit a question to be addressed by the system. For example:
+
+	./bin/elaborate.sh 'who killed hector'
+	
+	
 Usage
 -----
 
