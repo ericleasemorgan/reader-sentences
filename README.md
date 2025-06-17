@@ -125,6 +125,11 @@ Queries can be of just about any length and require zero syntax. That said, it i
 
 * `./bin/search-with-semantics.sh` - given a carrel, a word, an integer (I), and other integer (D), identify the N-most semantically related words to the given word, uses the given word and the related words as the query to `./bin/search.py`, and output D sentences
 
+In natural langaue processing, a set of stop words is a list of words with no or little importance. Examples usually include the words "the", "a", "an", "of", etc. Conversely, one might articulate a list of very useful words -- word of great significance. Such a set of words is sometimes called a "lexicon". If you create a file named ./etc/lexicon within your study carrel(s), then the following scripts will use the file as a part of their input:
+
+* `./bin/search-with-lexicon.sh` - given a study carrel and an integer (D), use the carrel's lexicon as the query for `./bin/search.py` and outputs D sentences
+
+* `./bin/search-with-modals.sh` -  given a study carrel, reads the carrel's lexicon and outputs all sentences where the lexicon words are the subject of the sentence, and the verb of the sentence is a modal verb; good for identifying very assertive sentences
 
 * `./bin/concordance.sh`
 
@@ -133,15 +138,6 @@ Queries can be of just about any length and require zero syntax. That said, it i
 * `./bin/markov2sentences.py`
 
 * `./bin/pose-a-question.py`
-
-
-
-* `./bin/search-with-lexicon.sh`
-
-* `./bin/search-with-modals.sh`
-
-
-
 
 * `./bin/search-with-verb.py`
 
