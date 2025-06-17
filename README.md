@@ -41,8 +41,18 @@ Think of this system as a tool to suppliment your reading. Create a collection o
 Requirements
 ------------
 
-There are many. 
+There are many. First, you will need to install the Distant Reader Toolbox:
 
+    pip install reader-toolbox
+
+Then you will need to create and/or download at least one Distant Reader study carrel. For example, download the Iliad and the Odyssey by Homer:
+
+	rdr download author-homer-gutenberg
+
+Next, you will need to install these scripts:
+
+    git pull https://github.com/ericleasemorgan/reader-sentences.git
+    
 Usage
 -----
 
