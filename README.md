@@ -1,11 +1,13 @@
 
 
 Reader Sentences
+==================
 
 tl;dnr  This suite of software is akin to a back-of-the-book index but on steroids.
 
 
 Introduction
+------------
 
 This directory contains a suite of software used to index and then search databases of sentences, and its purpose is to faciliate a question/answer interface to Distant Reader study carrels. For example, you could ask the system "Who killed Hector?" and get back the answer "Achilles". Alternatively, you could ask the system "What is knowledge?", and get back something like this:
 
@@ -15,17 +17,21 @@ Think of this system as a tool to suppliment your reading. Create a collection o
 
 
 Requirements
+------------
 
 
 Usage
+-----
 
 
 Case study
+----------
 
 
 Summary
+-------
 
 
---
-Eric Lease Morgan <eric_morgan@infomotions.com>
+---
+Eric Lease Morgan &lt;eric_morgan@infomotions.com&gt;  
 June 11, 2025
