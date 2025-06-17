@@ -93,25 +93,38 @@ Finally, you can use the following command to actually submit a question to be a
 Usage
 -----
 
-This suite of software is made up many little Python scripts and Bash front-ends. Listed below are each of the scripts and a brief description of what they do:
+This suite of software is made up many little Python scripts and Bash front-ends. This first list of scripts are the most used:
 
 * `./bin/carrel2sentences.py` - given the name of study carrel, extract and cache each of the sentences in each of the carrel's items
 
 * `./bin/vectorize.py` - given the name of a study carrel, vectorize ("index") the cached sentences
 
-* `./bin/search.py` - given a study carrel, a query, and an integer (N), search the carrel's database and returns N sentences while simultaneously caching the results in the ./etc directory
+* `./bin/search.py` - given a study carrel, a query, and an integer (N), search the carrel's database and return N sentences while simultaneously caching the results in the ./etc directory
 
-* `./bin/search.sh` - a front-end to ./bin/search.py; simply reformats the results into a single paragraph
+* `./bin/search.sh` - a front-end to `./bin/search.py`; simply reformats the results into a single paragraph
 
-* `./bin/format.py` - takes the cached result of ./bin/search.py, compares each sentence to it's subsequent sentence, and (usually) outputs many smaller paragraphs instead of just one
+* `./bin/format.py` - takes the cached result of `./bin/search.py`, compares each sentence to it's subsequent sentence, and (usually) outputs many smaller paragraphs instead of just one
 
-* `./bin/format.sh` - a front-end to ./bin/search.py; simply reformats the results to include a few blank lines for readability
+* `./bin/format.sh` - a front-end to `./bin/search.py`; simply reformats the results to include a few blank lines for readability
 
-* `./bin/summarize.py` - takes the cached result of ./bin/search.py, and uses a large-language model to summarize the cache
+* `./bin/summarize.py` - takes the cached result of `./bin/search.py`, and uses a large-language model to summarize the cache
 
 * `./bin/elaborate.py` - given a query in the form of a question, uses the cached result of `./bin/search.py` to address the given question; as such, this script is a simple implemenation of a retrieval-augmented generation (RAG) application
 
-* `./bin/elaborate.sh` - a front-end to ./bin/elaborate.py; simply adds a few blank lines to the output for readability purposes
+* `./bin/elaborate.sh` - a front-end to `./bin/elaborate.py`; simply adds a few blank lines to the output for readability purposes
+
+Queries can be of just about any length and require zero syntax. That said, it is oft-times difficult to articulate useful, meaningful, or comprehensive queries. The scripts below use extracted features from the given study carrel to create queries for you:
+
+* `./bin/search-with-unigrams.sh` - given the name of a study carrel, an integer (N), and another integer (D), identifies the N-most frequent unigrams in the given carrel, uses them as the query for `./bin/search.py`, and returns D sentences
+
+* `./bin/search-with-nouns.sh` - just like `./bin/search-with-unigrams.sh` but identifies the given carrel's N-most frequent nouns instead of unigrams
+
+* `./bin/search-with-keywords.sh` - just like `./bin/search-with-unigrams.sh` but identifies the given carrel's N-most frequent keywords instead of unigrams
+
+* `./bin/search-with-entities.sh` - given the name of a carrel, the value "PERSON" or "ORG", an integer (N), and another integer (D), identify the given carrel's N-most frequent persons or organizations, uses them as the query for `./bin/search.py`, and returns D sentences
+
+* `./bin/search-with-semantics.sh` - given a carrel, a word, an integer (I), and other integer (D), identify the N-most semantically related words to the given word, uses the given word and the related words as the query to `./bin/search.py`, and output D sentences
+
 
 * `./bin/concordance.sh`
 
@@ -121,27 +134,22 @@ This suite of software is made up many little Python scripts and Bash front-ends
 
 * `./bin/pose-a-question.py`
 
-* `./bin/search-with-entities.sh`
 
-* `./bin/search-with-keywords.sh`
 
 * `./bin/search-with-lexicon.sh`
 
 * `./bin/search-with-modals.sh`
 
-* `./bin/search-with-nouns.sh`
 
-* `./bin/search-with-semantics.sh`
 
-* ./bin/search-with-unigrams.sh
 
-* ./bin/search-with-verb.py
+* `./bin/search-with-verb.py`
 
-* ./bin/search-with-verb.sh
+* `./bin/search-with-verb.sh`
 
-* ./bin/tell-a-story.py
+* `./bin/tell-a-story.py`
 
-* ./bin/tell-a-story.sh
+* `./bin/tell-a-story.sh`
 
 
 Case study
