@@ -61,21 +61,21 @@ Now, read and cache all the sentences in a given study carrel:
 
 	./bin/carrel2sentences.py author-homer-gutenberg
 
-At the is stage, it is quite likely will have missing Python modules. Do you best to install them.
+At the is stage, it is quite likely there will be missing Python modules. Do you best to install them.
 
-The next step is vectorized ("index") the sentences:
+The next step is to vectorize ("index") the sentences:
 
 	./bin/vectorize.py author-homer-gutenberg
 	
-Again, it is quite likely you will have missing Python modules and/or you will have missing HuggingFace models. Do your best to install the modules. To resolve the issues with HuggingFace model, create a HuggingFace account, get a HuggingFace token, and create an environment variable with the name "HF_TOKEN" with the token's value. Repeat the previous step. Please be patient; this step is computationally expensive.
+Again, it is quite likely you will have missing Python modules and/or you will have missing HuggingFace models. Do your best to install the modules. To resolve the issues with the HuggingFace model, create a HuggingFace account, get a HuggingFace token, and create an environment variable with the name "HF_TOKEN" with the token's value. Repeat the previous step, and please be patient; this step is computationally expensive.
 
 Once you get this far, you can query the database of sentences. The following command queries the study carrel named "author-homer-gutenberg" for the word "hector" and returns thirty-two sentences:
 
 	./bin/search.sh author-homer-gutenberg hector 32
 
-The result ought be a paragraph sixteen sentences long. Each sentece ought to allude to Hector in some way, shape, or form.
+The result ought be a paragraph thirty-two sentences long. Each sentece ought to allude to Hector in some way, shape, or form.
 
-One way to make more sense of the long paragraph is to divide into smaller paragraphs, like this:
+One way to make more sense of the long paragraph is to divide it into smaller paragraphs, like this:
 
 	./bin/format.sh
 
