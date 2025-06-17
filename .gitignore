@@ -1,4 +1,5 @@
-cached-carrel.txt
-cached-cites.txt
-cached-query.txt
 cached-results.txt
+cached-carrel.txt
+.DS_Store
+cached-query.txt
+cached-cites.txt
