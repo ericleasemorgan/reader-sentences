@@ -9,7 +9,7 @@ Reader Sentences
 Introduction
 ------------
 
-This directory contains a suite of software used to index and then search databases of sentences, and its purpose is to faciliate a question/answer interface to Distant Reader study carrels. For example, you could ask the system "Who killed Hector?" and get back the answer some like this:
+This directory contains a suite of software used to index and then search databases of sentences, and its purpose is to faciliate a question/answer interface to Distant Reader study carrels. For example, you could ask the system "Who killed Hector?" and get back an answer something like this:
 
 > In the context of the story, it is clear that Hector was killed by
 Achilles. The passage mentions several instances where Hector is injured
@@ -33,8 +33,7 @@ knowledge, knowledge belongs only to an individual person. The concept
 of knowledge is closely tied to the idea of self-knowledge, which can
 only be realized through face-to-face encounters with others.
 
-
-**Very important!** This system is not intended nor expected to return <em>the</em> answers to given questions. Instead it is intended to return plausible answers, and you are expected to use the results as discussion points or to use traditional reading techniques for the purpose of verification.
+**Very important!** This system is not intended nor expected to return <em>the</em> answers to given questions. Instead it is intended to return <em>plausible</em> answers, and you are expected to use the results as discussion points or to use traditional reading techniques for the purpose of verification.
 
 Think of this system as a tool to suppliment your reading. Create a collection of texts, index (model) the collection, search the index, interact with the model, and in the end, garner a better understanding of the collection. Think of the whole process as a sort of interactive discussion with a book. As such, this system implemements a form of reading. 
 
