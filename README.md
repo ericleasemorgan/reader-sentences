@@ -3,7 +3,7 @@
 Reader Sentences
 ==================
 
-**tl;dnr**  This suite of software is akin to a back-of-the-book index but on steroids.
+**tl;dnr**  This suite of software is akin to a back-of-the-book index but on steroids. It is a tool for reading.
 
 
 Introduction
