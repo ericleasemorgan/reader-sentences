@@ -89,6 +89,7 @@ Finally, you can use the following command to actually submit a question to be a
 
 	./bin/elaborate.sh 'who killed hector'
 	
+
 	
 Usage
 -----
@@ -113,6 +114,7 @@ This suite of software is made up many little Python scripts and Bash front-ends
 
 * `./bin/elaborate.sh` - a front-end to `./bin/elaborate.py`; simply adds a few blank lines to the output for readability purposes
 
+
 Queries can be of just about any length and require zero syntax. That said, it is oft-times difficult to articulate useful, meaningful, or comprehensive queries. The scripts below use extracted features from the given study carrel to create queries for you:
 
 * `./bin/search-with-unigrams.sh` - given the name of a study carrel, an integer (N), and another integer (D), identifies the N-most frequent unigrams in the given carrel, uses them as the query for `./bin/search.py`, and returns D sentences
@@ -125,27 +127,36 @@ Queries can be of just about any length and require zero syntax. That said, it i
 
 * `./bin/search-with-semantics.sh` - given a carrel, a word, an integer (I), and other integer (D), identify the N-most semantically related words to the given word, uses the given word and the related words as the query to `./bin/search.py`, and output D sentences
 
+
 In natural langaue processing, a set of stop words is a list of words with no or little importance. Examples usually include the words "the", "a", "an", "of", etc. Conversely, one might articulate a list of very useful words -- word of great significance. Such a set of words is sometimes called a "lexicon". If you create a file named ./etc/lexicon within your study carrel(s), then the following scripts will use the file as a part of their input:
 
 * `./bin/search-with-lexicon.sh` - given a study carrel and an integer (D), use the carrel's lexicon as the query for `./bin/search.py` and outputs D sentences
 
 * `./bin/search-with-modals.sh` -  given a study carrel, reads the carrel's lexicon and outputs all sentences where the lexicon words are the subject of the sentence, and the verb of the sentence is a modal verb; good for identifying very assertive sentences
 
-* `./bin/concordance.sh`
+* `./bin/search-with-verb.py` - given a carrel and a lematize verb, find all sentences whose subject is a lexicon word and whose verb is a form of the verb
 
-* `./bin/define.py`
+* `./bin/search-with-verb.sh` - a front-end to `./bin/search-with-verb.py`, and merely adds some formatting to the output
 
-* `./bin/markov2sentences.py`
 
-* `./bin/pose-a-question.py`
+The following two scripts help you to define words. They do not output <em>the</em> defintion of words but rather <em>plausible</em> definitions:
 
-* `./bin/search-with-verb.py`
+* `./bin/define.py` - given a carrel and a words, finds all sentences containing the given word, uses the Lesk Algorithm to predict the word's defintion, and output possible defintions of the word and their frequencies
 
-* `./bin/search-with-verb.sh`
+* `./bin/concordance.sh` - given the name of a study carrel and a word/phrase, output a list of sentence-like thing containin the word/phrase
 
-* `./bin/tell-a-story.py`
+The following is a miscelleneous script:
 
-* `./bin/tell-a-story.sh`
+* `./bin/pose-a-question.py` - given the name of a carrel, randomly select a question from it's database of sentences
+
+
+The following scripts are just for fun. They employ a Markov modeling technique to pseudo-randomly generate sentences. Use these scripts to become familiar with the common bigrams (two-word phrases) in the given carrel.
+
+* `./bin/markov2sentences.py` - given the name of a carrel, a two-word phrase, and an integer, parse the text of the given carrel, and output the given phrase and common two-word phrases that <em>may</em> follow it; the integer denotes how many times the process should be repeated.
+
+* `./bin/tell-a-story.py` - given the name of a carrel, randomly select an item from it, model the text, and output two paragraphs of pseudo-sentences
+
+* `./bin/tell-a-story.sh` - a front-end to `./bin/tell-a-story.py`, and merely adds some formatting to the output
 
 
 Case study
@@ -158,4 +169,4 @@ Summary
 
 ---
 Eric Lease Morgan &lt;eric_morgan@infomotions.com&gt;  
-June 17, 2025
+June 18, 2025
