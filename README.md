@@ -166,7 +166,7 @@ Case study
 Summary
 -------
 
-This suite of software is as tool for reading. Create and/or download Distant Reader study carrels ("data sets"). Extract and cache all of the sentences in all of the items in the carrel. Vectorize (index/model) them. Use the scripts in this distribution to query the sentences and thus become familar with the carrel's content. Compare and contrast the results with other study carrel of similar content. Use the results as points of dicussion with other people.
+This suite of software is as tool for reading. Create and/or download Distant Reader study carrels ("data sets"). Extract and cache all of the sentences in all of the items in the carrel. Vectorize (index/model) them. Use the scripts in this distribution to query the sentences and thus become familar with the carrel's content. Compare and contrast the results from one study carrel with the results from another study carrel. Use the outputs of these scripts as points of dicussion with other people.
 
 ---
 Eric Lease Morgan &lt;eric_morgan@infomotions.com&gt;  
