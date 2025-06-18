@@ -312,6 +312,18 @@ Finally, ask a specific question:
 > In this passage, Ulysses and Penelope have a deep emotional connection as they reunite after many years of separation. Penelope recognizes Ulysses as her husband and is overjoyed to see him, while Ulysses is grateful to be back in his home with his wife. The goddess Minerva plays a crucial role in their reunion, helping them to recognize each other despite their physical transformations. The passage also highlights the loyalty and devotion of Penelope, who has remained faithful to Ulysses even after many years of his absence. Overall, the relationship between Ulysses and Penelope is one of love, trust, and mutual respect.
 
 
+Next Steps
+----------
+
+A few possible next steps include:
+
+* download Jane Austen's Emma and ask the question, "Who is Emma?"; the Distant Reader study carrel for Austen's Emma is title-emma_by_austen-gutenberg
+
+* download Henry David Thoreau's Walden Pond (title-walden_by_thoreau-gutenberg), and learn the importance of beans in the book
+
+* download John Locke's An Essay Concerning Human Understanding (title-essay_by_locke-gutenberg), and address the question, "What are knowledge, truth, and understanding?"
+
+
 Summary
 -------
 
