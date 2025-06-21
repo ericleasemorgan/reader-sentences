@@ -5,7 +5,8 @@
 # Eric Lease Morgan <emorgan@nd.edu>
 # (c) University of Notre Dame; distributed under a GNU Public License
 
-# May 26, 2025 - trying yet again
+# May  26, 2025 - trying yet again
+# June 18, 2025 - trapped file too big
 
 
 # configure
@@ -37,7 +38,11 @@ def file2sentences( file, nlp, cache ) :
 	stderr.write( item + '\n' )
 	
 	# get and normalize sentences
-	text      = nlp( text )
+	try : text      = nlp( text )
+	except ValueError :
+		stderr.write( 'File too big for processor. Call Eric\n' )
+		return
+		
 	sentences = list( text.sents )
 	sentences = [ sentence.text                 for sentence in sentences ]	
 	sentences = [ sentence.replace( '\t', ' ' ) for sentence in sentences ]

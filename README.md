@@ -319,11 +319,17 @@ A few possible next steps include:
 
 * download Jane Austen's Emma and ask the question, "Who is Emma?"; the Distant Reader study carrel for Austen's Emma is title-emma_by_austen-gutenberg
 
-* download Henry David Thoreau's Walden Pond (title-walden_by_thoreau-gutenberg), and learn the importance of beans in the book
+* download Henry David Thoreau's Walden Pond (title-walden_by_thoreau-gutenberg), and learn about the importance of beans in the book
 
 * download John Locke's An Essay Concerning Human Understanding (title-essay_by_locke-gutenberg), and address the question, "What are knowledge, truth, and understanding?"
 
 
+Help!
+-----
+
+This software suite suffers from Python Module Madness. The system works, but the modules are persnickety, very, to sah the least. Any help in this regard would be gratefully appreciated.
+
+ 
 Summary
 -------
 
