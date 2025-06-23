@@ -1,5 +1,5 @@
-cached-results.txt
-cached-carrel.txt
 .DS_Store
-cached-query.txt
-cached-cites.txt
+etc/cached-results.txt
+etc/cached-query.txt
+etc/cached-cites.txt
+etc/cached-carrel.txt
