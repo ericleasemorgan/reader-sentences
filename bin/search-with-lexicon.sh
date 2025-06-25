@@ -12,38 +12,22 @@
 SEARCH='./bin/search.py'
 ETC='etc'
 LEXICON='lexicon.txt'
-DEPTH=64
 
 # get input
 if [[ -z $1|| -z $2 ]]; then
-	echo "Usage: $0 <carrel> <terse|short|brief|long|verbose>" >&2
+	echo "Usage: $0 <carrel> <depth>" >&2
 	exit
 fi
 CARREL=$1
-SIZE=$2
-
-if [[ "$SIZE" == 'terse' ]]; then
-	DEPTH=8
-elif [[ "$SIZE" == 'short' ]]; then
-	DEPTH=16
-elif [[ "$SIZE" == 'brief' ]]; then
-	DEPTH=32
-elif [[ "$SIZE" == 'long' ]]; then
-	DEPTH=64
-elif [[ "$SIZE" == 'verbose' ]]; then
-	DEPTH=128
-else
-	DEPTH=32
-fi
+DEPTH=$2
 
 # use the Reader to get SIZE number of keywords and build a query
 LEXICON="$(rdr get)/$CARREL/$ETC/$LEXICON"
 QUERY=$(cat $LEXICON | tr '\n' ' ')
 
-# build a pattern
-PATTERN="\b$(echo $QUERY | sed "s/ /\\\b|\\\b/g")\b"
-echo "  Pattern: $PATTERN" >&2
-
 # submit the work, format the output, and done
-$SEARCH $CARREL "$QUERY" $DEPTH | sed "s/$/\n/" | fold -s | less -i --pattern=$PATTERN
+#$SEARCH $CARREL "$QUERY" $DEPTH | sed "s/$/\n/" | fold -s | less -i --pattern=$PATTERN
+echo
+$SEARCH $CARREL "$QUERY" $DEPTH | sed "s/$/ /" | fmt
+echo
 exit

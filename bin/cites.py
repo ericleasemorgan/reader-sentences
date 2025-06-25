@@ -86,7 +86,7 @@ if output == 'human' :
 		print( '     author: %s' % author )
 		print( '      title: %s' % title )
 		print( '       date: %s' % date )
-		print( '    summary: %s' % summary )
+		#print( '    summary: %s' % summary )
 		print( '   keywords: %s' % keywords )
 		print( '  sentences: %s' % sentences )
 		print( '      cache: %s' % cache  )
