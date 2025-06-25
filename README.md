@@ -304,6 +304,8 @@ Get even more context:
 
 Aparently Penelope is admireable and has an excellent nature, and if you read closely Ulysses calls Penelope "wife":
 
+> Not that your wife, Ulysses, is likely to murder you, for Penelope is a very admirable woman, and has an excellent nature.  " Penelope was moved still more deeply as she heard the indisputable proofs that Ulysses laid before her; and when she had again found relief in tears she said to him," Stranger, I was already disposed to pity you, but henceforth you shall be honoured and made welcome in my house.  PENELOPE EVENTUALLY RECOGNISES HER HUSBAND—EARLY IN THE MORNING ULYSSES, TELEMACHUS, EUMAEUS, AND PHILOETIUS LEAVE THE TOWN. On this, Ulysses rose from his comfortable bed and said to Penelope," Wife, we have both of us had our full share of troubles, you, here, in lamenting my absence, and I in being prevented from getting home though I was longing all the time to do so.
+
 Jump ahead and get a lot of context, reformat the results, and summarize:
 
 	./bin/search.sh author-homer-gutenberg 'ulysses penelope' 32
