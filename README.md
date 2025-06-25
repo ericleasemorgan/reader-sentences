@@ -49,7 +49,7 @@ Then you will need to create and/or download at least one Distant Reader study c
 
 	rdr download author-homer-gutenberg
 
-Next, you will need to install Reader Sentences scripts:
+Next, you will need to install the Reader Sentences scripts:
 
     git pull https://github.com/ericleasemorgan/reader-sentences.git
 
@@ -67,7 +67,7 @@ The next step is to vectorize ("index") the sentences:
 
 	./bin/vectorize.py author-homer-gutenberg
 	
-Again, it is quite likely you will have missing Python modules and/or you will have missing HuggingFace models. Do your best to install the modules. To resolve the issues with the HuggingFace models, create a HuggingFace account, get a HuggingFace token, and create an environment variable with the name "HF_TOKEN" with the token's value. Repeat the previous step, and please be patient; this step is computationally expensive.
+Again, it is quite likely you will have missing Python modules and/or you will have missing HuggingFace models. Do your best to install the modules. To resolve the issues with the HuggingFace models, create a HuggingFace account, get a HuggingFace token, and create an environment variable with the name "HF_TOKEN" and with the token's value. Repeat the previous step, and please be patient; this step is computationally expensive.
 
 Once you get this far, you can query the database of vectorized sentences. The following command queries the study carrel named "author-homer-gutenberg" for the word "hector" and returns thirty-two sentences:
 
@@ -79,11 +79,11 @@ One way to make more sense of the long paragraph is to divide it into smaller pa
 
 	./bin/format.sh
 
-Another way to make more sense of the long paragarph is to use a large-langauge model to summarize it:
+Another way to make more sense of the long paragarph is to use a large-language model to summarize it:
 
 	./bin/summarize.sh
 
-The previous step requires the installation of Ollama and a large-language model called "Llama2". Alas?
+The previous step requires the installation of [Ollama](https://ollama.com) and a large-language model called "[Llama2](https://ollama.com/library/llama2)". Alas?
 
 Finally, you can use the following command to actually submit a question to be addressed by the system. For example:
 
@@ -102,20 +102,24 @@ This suite of software is made up many little Python scripts and Bash front-ends
 
 * `./bin/search.py` - given a study carrel, a query, and an integer (N), search the carrel's database and return N sentences while simultaneously caching the results in the ./etc directory
 
-* `./bin/search.sh` - a front-end to `./bin/search.py`; simply reformats the results into a single paragraph
-
 * `./bin/format.py` - takes the cached result of `./bin/search.py`, compares each sentence to it's subsequent sentence, and (usually) outputs many smaller paragraphs instead of just one
-
-* `./bin/format.sh` - a front-end to `./bin/search.py`; simply reformats the results to include a few blank lines for readability
 
 * `./bin/summarize.py` - takes the cached result of `./bin/search.py`, and uses a large-language model to summarize the cache
 
 * `./bin/elaborate.py` - given a query in the form of a question, uses the cached result of `./bin/search.py` to address the given question; as such, this script is a simple implemenation of a retrieval-augmented generation (RAG) application
 
+The following scripts are front-ends to their Python equivalents, and all they really do is add some formatting to the outputs:
+
+* `./bin/search.sh` - a front-end to `./bin/search.py`; simply reformats the results into a single paragraph
+
+* `./bin/format.sh` - a front-end to `./bin/search.py`; simply reformats the results to include a few blank lines for readability
+
+* `./bin/summarize.sh` - takes the cached result of `./bin/search.py`, and uses a large-language model to summarize the cache
+
 * `./bin/elaborate.sh` - a front-end to `./bin/elaborate.py`; simply adds a few blank lines to the output for readability purposes
 
 
-Queries can be of just about any length and require zero syntax. That said, it is oft-times difficult to articulate useful, meaningful, or comprehensive queries. The scripts below use extracted features from the given study carrel to create queries for you:
+Queries can be of just about any length and require zero syntax. That said, it is oft-times difficult to articulate useful, meaningful, or comprehensive queries. The scripts below use extracted features from the given study carrel to create  more expressive queries for you:
 
 * `./bin/search-with-unigrams.sh` - given the name of a study carrel, an integer (N), and another integer (D), identifies the N-most frequent unigrams in the given carrel, uses them as the query for `./bin/search.py`, and returns D sentences
 
@@ -125,29 +129,32 @@ Queries can be of just about any length and require zero syntax. That said, it i
 
 * `./bin/search-with-entities.sh` - given the name of a carrel, the value "PERSON" or "ORG", an integer (N), and another integer (D), identify the given carrel's N-most frequent persons or organizations, uses them as the query for `./bin/search.py`, and returns D sentences
 
-* `./bin/search-with-semantics.sh` - given a carrel, a word, an integer (I), and other integer (D), identify the N-most semantically related words to the given word, uses the given word and the related words as the query to `./bin/search.py`, and output D sentences
+* `./bin/search-with-semantics.sh` - given a carrel, a word, an integer (I), and other integer (D), identify the N-most semantically related words to the given word, uses the given word and the related words as the query to `./bin/search.py`, and returns D sentences
 
 
-In natural langaue processing, a set of stop words is a list of words with no or little importance. Examples usually include the words "the", "a", "an", "of", etc. Conversely, one might articulate a list of very useful words -- word of great significance. Such a set of words is sometimes called a "lexicon". If you create a file named ./etc/lexicon within your study carrel(s), then the following scripts will use the file as a part of their input:
+In natural language processing, a set of stop words is a list of words with no or little importance. Examples usually include the words "the", "a", "an", "of", etc. Conversely, one might articulate a list of very useful words -- word of great significance. Such a set of words is sometimes called a "lexicon". If you create a file named `./etc/lexicon.txt` within your study carrel(s), then the following scripts will use that file as they query part of the input:
 
 * `./bin/search-with-lexicon.sh` - given a study carrel and an integer (D), use the carrel's lexicon as the query for `./bin/search.py` and outputs D sentences
 
-* `./bin/search-with-modals.sh` -  given a study carrel, reads the carrel's lexicon and outputs all sentences where the lexicon words are the subject of the sentence, and the verb of the sentence is a modal verb; good for identifying very assertive sentences
+* `./bin/search-with-modals.sh` - given a study carrel, reads the carrel's lexicon and outputs all sentences where the lexicon words are the subject of the sentence, and the verb of the sentence is a modal verb; good for identifying very assertive sentences
 
-* `./bin/search-with-verb.py` - given a carrel and a lematize verb, find all sentences whose subject is a lexicon word and whose verb is a form of the verb
+* `./bin/search-with-verb.py` - given a carrel and a lemmatized verb (think "root" word), find all sentences whose subject is a lexicon word and whose verb is a form of the verb
 
 * `./bin/search-with-verb.sh` - a front-end to `./bin/search-with-verb.py`, and merely adds some formatting to the output
 
+The curation of lexicons is a thing all to itself. See [Reader Lexicons[(https://github.com/ericleasemorgan/reader-lexicons) for ways to create more expressive lexicons.
 
 The following two scripts help you to define words. They do not output <em>the</em> defintion of words but rather <em>plausible</em> definitions:
 
-* `./bin/define.py` - given a carrel and a words, finds all sentences containing the given word, uses the Lesk Algorithm to predict the word's defintion, and output possible defintions of the word and their frequencies
+* `./bin/define.py` - given a carrel and a words, finds all sentences containing the given word, uses the Lesk Algorithm to predict the word's defintion, and outputs possible defintions of the word and their frequencies
 
-* `./bin/concordance.sh` - given the name of a study carrel and a word/phrase, output a list of sentence-like thing containin the word/phrase
+* `./bin/concordance.sh` - given the name of a study carrel and a word/phrase, output a list of sentence-like thing containing the word/phrase
 
-The following is a miscelleneous script:
+The following are miscellaneous scripts:
 
 * `./bin/pose-a-question.py` - given the name of a carrel, randomly select a question from it's database of sentences
+
+* `./bin/cites.py` - given the word "human", "csv", or "json", output bibliographic information describing whence the sentences came; good for learning what study carrel item to do close reading against
 
 
 The following scripts are just for fun. They employ a Markov modeling technique to pseudo-randomly generate sentences. Use these scripts to become familiar with the common bigrams (two-word phrases) in the given carrel.
@@ -287,9 +294,9 @@ Get more context:
 
 	./bin/search.sh author-homer-gutenberg 'ulysses penelope' 2
 	
-She recognizes him:
-
 > Penelope was moved still more deeply as she heard the indisputable proofs that Ulysses laid before her; and when she had again found relief in tears she said to him," Stranger, I was already disposed to pity you, but henceforth you shall be honoured and made welcome in my house.  PENELOPE EVENTUALLY RECOGNISES HER HUSBAND—EARLY IN THE MORNING ULYSSES, TELEMACHUS, EUMAEUS, AND PHILOETIUS LEAVE THE TOWN.
+
+She recognizes him:
 
 Get even more context:
 
@@ -297,7 +304,7 @@ Get even more context:
 
 Aparently Penelope is admireable and has an excellent nature, and if you read closely Ulysses calls Penelope "wife":
 
-Jump ahead and the a lot of context, reformat the results, and summarize:
+Jump ahead and get a lot of context, reformat the results, and summarize:
 
 	./bin/search.sh author-homer-gutenberg 'ulysses penelope' 32
 	./bin/format.sh
@@ -319,15 +326,9 @@ A few possible next steps include:
 
 * download Jane Austen's Emma and ask the question, "Who is Emma?"; the Distant Reader study carrel for Austen's Emma is title-emma_by_austen-gutenberg
 
-* download Henry David Thoreau's Walden Pond (title-walden_by_thoreau-gutenberg), and learn about the importance of beans in the book
+* download Henry David Thoreau's Walden Pond (title-walden_by_thoreau-gutenberg), and learn about the importance of beans
 
 * download John Locke's An Essay Concerning Human Understanding (title-essay_by_locke-gutenberg), and address the question, "What are knowledge, truth, and understanding?"
-
-
-Help!
------
-
-This software suite suffers from Python Module Madness. The system works, but the modules are persnickety, very, to sah the least. Any help in this regard would be gratefully appreciated.
 
  
 Summary
@@ -335,6 +336,9 @@ Summary
 
 This suite of software is as tool for reading. Create and/or download Distant Reader study carrels ("data sets"). Extract and cache all of the sentences in all of the items in the carrel. Vectorize (index/model) them. Use the scripts in this distribution to query the sentences and thus become familar with the carrel's content. Compare and contrast the results from one study carrel with the results from another study carrel. Use the outputs of these scripts as points of dicussion with other people.
 
+Finally, while they system uses various techniques to riff on the search results, do your best to closely read the search results before you summarize or elaborate. It is your responsibility to figure out the degree any of the underlying large-language models are halucinating. Again, the system does not output <em>the</em> answer but instead it outputs <em>plausible</em> answers.
+
+
 ---
 Eric Lease Morgan &lt;eric_morgan@infomotions.com&gt;  
-June 18, 2025
+June 25, 2025
