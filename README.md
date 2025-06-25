@@ -296,7 +296,7 @@ Get more context:
 	
 > Penelope was moved still more deeply as she heard the indisputable proofs that Ulysses laid before her; and when she had again found relief in tears she said to him," Stranger, I was already disposed to pity you, but henceforth you shall be honoured and made welcome in my house.  PENELOPE EVENTUALLY RECOGNISES HER HUSBAND—EARLY IN THE MORNING ULYSSES, TELEMACHUS, EUMAEUS, AND PHILOETIUS LEAVE THE TOWN.
 
-She recognizes him:
+She recognizes him.
 
 Get even more context:
 
