@@ -22,6 +22,7 @@ from scipy.signal             import argrelextrema
 from sentence_transformers    import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy                  as     np
+from sys                      import exit
 
 def rev_sigmoid( x:float )->float : return ( 1 / ( 1 + exp( 0.5*x ) ) )
     
@@ -68,8 +69,9 @@ sentences = open( SENTENCES ).read().splitlines()
 
 # vectorize and activated similaritites; for longer sentences increase the value of PSIZE
 embeddings   = model.encode( sentences )
-similarities = activate_similarities( cosine_similarity(embeddings), p_size=PSIZE )
-
+try : similarities = activate_similarities( cosine_similarity(embeddings), p_size=PSIZE )
+except ValueError as error : exit( "Number of sentences too small. If this error continues, call Eric\n" )
+	
 # compute the minmimas -- the valleys between sentences
 minmimas = argrelextrema( similarities, np.less, order=2 )
 
