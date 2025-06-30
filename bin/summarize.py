@@ -15,12 +15,14 @@ PROMPT  = 'Summarize the following context: %s'
 
 # require
 from ollama import generate
+from sys    import exit
 
 # initialize
 context = open( CONTEXT ).read()
 prompt  = ( PROMPT % ( context ))
 
 # submit the work, output, and done
-response = generate( MODEL, prompt )
+try: response = generate( MODEL, prompt )
+except ConnectionError as error : exit( 'Ollam is probably not running. Start it.' )
 print( response[ 'response' ] )
 exit()
