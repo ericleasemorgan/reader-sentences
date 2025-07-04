@@ -10,11 +10,12 @@
 # May 17, 2025 - migrated to Euclidian (VEC_DISTANCE_L2) distances
 # May 22, 2025 - added title of item and item (sentence) number to database
 # June 7, 2025 - normalized sentences so they are always strings
+# July 4, 2025 - using a new embedder
 
 
 # configure
-EMBEDDER  = 'multi-qa-MiniLM-L6-cos-v1'
-CREATE    = "CREATE TABLE sentences (title TEXT, item INT, sentence TEXT, embedding FLOAT[384] CHECK (TYPEOF(embedding)=='blob' AND VEC_LENGTH(embedding)==384))"
+EMBEDDER  = 'all-mpnet-base-v2'
+CREATE    = "CREATE TABLE sentences (title TEXT, item INT, sentence TEXT, embedding FLOAT[768] CHECK (TYPEOF(embedding)=='blob' AND VEC_LENGTH(embedding)==768))"
 INSERT    = "INSERT INTO sentences (title, item, sentence, embedding) VALUES (?, ?, ?, ?)"
 PATTERN   = '*.snt'
 LIBRARY   = 'localLibrary'

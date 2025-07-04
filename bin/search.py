@@ -14,13 +14,14 @@
 # May  30, 2025 - added cache; tomorrow is my last day here at Notre Dame, yikes!
 # June  6, 2025 - calling it my own; added a bit of documentation
 # June 13, 2025 - added additional caches
+# Jult  4, 2025 - changed embedder
 
 
 # configure
+EMBEDDER      = 'all-mpnet-base-v2'
 LIBRARY       = 'localLibrary'
 SELECT        = "SELECT title, item, sentence, VEC_DISTANCE_L2(embedding, ?) AS distance FROM sentences ORDER BY distance LIMIT ?"
 DATABASE      = 'sentences.db'
-EMBEDDER      = 'multi-qa-MiniLM-L6-cos-v1'
 COLUMNS       = [ 'titles', 'items', 'sentences', 'distances' ]
 CACHEDRESULTS = './etc/cached-results.txt'
 CACHEDCARREL  = './etc/cached-carrel.txt'
