@@ -6,12 +6,14 @@
 # (c) University of Notre Dame; distributed under a GNU Public license
 
 # May 23, 2025 - first cut; building my own RAG system
+# July 5, 2025 - started adding prompts
 
 
 # configure
 MODEL   = 'llama2'
 CONTEXT = './etc/cached-results.txt'
-PROMPT  = 'In a few short short sentences, address the question "%s" using the following context: %s'
+PROMPT  = 'In a few short short sentences, address the question "%s" for a freshman at a college or university and using the following context: %s'
+SYSTEM  = 'You are a college or university professor.'
 
 # require
 from ollama import generate
@@ -26,6 +28,6 @@ context = open( CONTEXT ).read()
 prompt  = ( PROMPT % ( question, context ))
 
 # submit the work, output, and done
-result = generate( MODEL, prompt )
+result = generate( MODEL, prompt, system=SYSTEM )
 print( result['response'] )
 exit()

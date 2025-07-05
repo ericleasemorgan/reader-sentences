@@ -6,12 +6,14 @@
 # (c) University of Notre Dame; distributed under a GNU Public license
 
 # May 23, 2025 - first cut; building my own RAG system
+# July 5, 2025 - adding more sophisticated prompts
 
 
 # configure
 MODEL   = 'llama2'
 CONTEXT = './etc/cached-results.txt'
-PROMPT  = 'Summarize the following context: %s'
+PROMPT  = 'Summarize the following context for a freshman at a college or university: %s'
+SYSTEM  = 'You are a college or university professor.'
 
 # require
 from ollama import generate
@@ -22,7 +24,7 @@ context = open( CONTEXT ).read()
 prompt  = ( PROMPT % ( context ))
 
 # submit the work, output, and done
-try: response = generate( MODEL, prompt )
-except ConnectionError as error : exit( 'Ollama is probably not running. Start it. Otherwise, call Eric.' )
+try: response = generate( MODEL, prompt, system=SYSTEM )
+except ConnectionError : exit( 'Ollama is probably not running. Start it. Otherwise, call Eric.' )
 print( response[ 'response' ] )
 exit()
