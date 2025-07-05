@@ -8,21 +8,22 @@
 
 # May  25, 2025 - first cut; fun!
 # June  6, 2025 - commented out shortenting and lengthening sentences
+# July  4, 2025 - moved to Ollam and a different embedder
 
 
 # configure
-MODEL     = 'all-mpnet-base-v2'
+MODEL     = 'nomic-embed-text'
 SENTENCES = './etc/cached-results.txt'
 PSIZE     = 16
 
 # require
 from math                     import exp
+from ollama                   import embed
 from re                       import sub
 from scipy.signal             import argrelextrema
-from sentence_transformers    import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-import numpy                  as     np
 from sys                      import exit
+import numpy                  as     np
 
 def rev_sigmoid( x:float )->float : return ( 1 / ( 1 + exp( 0.5*x ) ) )
     
@@ -64,13 +65,13 @@ def activate_similarities( similarities:np.array, p_size=10 )->np.array :
         return activated_similarities
 
 # initialize
-model     = SentenceTransformer( MODEL )
 sentences = open( SENTENCES ).read().splitlines()
 
 # vectorize and activated similaritites; for longer sentences increase the value of PSIZE
-embeddings   = model.encode( sentences )
+embeddings = embed( model=MODEL, input=sentences ).model_dump( mode='json' )[ 'embeddings' ]
+
 try : similarities = activate_similarities( cosine_similarity(embeddings), p_size=PSIZE )
-except ValueError as error : exit( "Number of sentences too small. If this error continues, call Eric\n" )
+except ValueError as error : exit( "Number of sentences too small. If this error continues, call Eric.\n" )
 	
 # compute the minmimas -- the valleys between sentences
 minmimas = argrelextrema( similarities, np.less, order=2 )

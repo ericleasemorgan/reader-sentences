@@ -18,7 +18,7 @@
 
 
 # configure
-EMBEDDER      = 'all-mpnet-base-v2'
+MODEL         = 'nomic-embed-text'
 LIBRARY       = 'localLibrary'
 SELECT        = "SELECT title, item, sentence, VEC_DISTANCE_L2(embedding, ?) AS distance FROM sentences ORDER BY distance LIMIT ?"
 DATABASE      = 'sentences.db'
@@ -29,14 +29,14 @@ CACHEDQUERY   = './etc/cached-query.txt'
 CACHEDCITES   = './etc/cached-cites.txt'
 
 # require
-from pandas                import DataFrame
-from rdr                   import configuration, ETC
-from sentence_transformers import SentenceTransformer
-from sqlite_vec            import load
-from sqlite3               import connect
-from struct                import pack
-from sys                   import argv, exit
-from typing                import List
+from ollama     import embed
+from pandas     import DataFrame
+from rdr        import configuration, ETC
+from sqlite_vec import load
+from sqlite3    import connect
+from struct     import pack
+from sys        import argv, exit
+from typing     import List
 
 # get input
 if len( argv ) != 4 : exit( 'Usage: ' + argv[ 0 ] + " <carrel> <query> <depth>" )
@@ -51,19 +51,18 @@ def serialize( vector: List[float]) -> bytes : return pack( "%sf" % len( vector 
 library = configuration( LIBRARY )
 
 # get all sentences; might not be scalable
-embedder = SentenceTransformer( EMBEDDER )
 database = connect( library/carrel/ETC/DATABASE )
 database.enable_load_extension( True )
 load( database )
 
-# save the cache for other possible processes, and done
+# save the cache for other possible processes
 with open( CACHEDCARREL, 'w' ) as handle : handle.write( carrel )
 
-# save the cache for other possible processes, and done
+# save the cache for other possible processes
 with open( CACHEDQUERY, 'w' ) as handle : handle.write( query )
 
 # vectorize query and search; get a set of matching records
-query   = embedder.encode( query ).tolist()
+query   = embed( model=MODEL, input=query ).model_dump( mode='json' )[ 'embeddings' ][ 0 ]
 records = database.execute( SELECT, [ serialize( query ), depth ] ).fetchall()
 
 # process each result; create a list of sentences

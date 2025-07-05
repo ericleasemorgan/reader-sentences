@@ -11,7 +11,7 @@
 # configure
 MODEL   = 'llama2'
 CONTEXT = './etc/cached-results.txt'
-PROMPT  = 'In a few short short sentences, address the question %s using the following context: %s'
+PROMPT  = 'In a few short short sentences, address the question "%s" using the following context: %s'
 
 # require
 from ollama import generate

@@ -23,6 +23,6 @@ prompt  = ( PROMPT % ( context ))
 
 # submit the work, output, and done
 try: response = generate( MODEL, prompt )
-except ConnectionError as error : exit( 'Ollam is probably not running. Start it.' )
+except ConnectionError as error : exit( 'Ollama is probably not running. Start it. Otherwise, call Eric.' )
 print( response[ 'response' ] )
 exit()

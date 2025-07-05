@@ -10,29 +10,29 @@
 # May 17, 2025 - migrated to Euclidian (VEC_DISTANCE_L2) distances
 # May 22, 2025 - added title of item and item (sentence) number to database
 # June 7, 2025 - normalized sentences so they are always strings
-# July 4, 2025 - using a new embedder
+# July 4, 2025 - using a new embedder; actually moved to Ollama
 
 
 # configure
-EMBEDDER  = 'all-mpnet-base-v2'
-CREATE    = "CREATE TABLE sentences (title TEXT, item INT, sentence TEXT, embedding FLOAT[768] CHECK (TYPEOF(embedding)=='blob' AND VEC_LENGTH(embedding)==768))"
-INSERT    = "INSERT INTO sentences (title, item, sentence, embedding) VALUES (?, ?, ?, ?)"
-PATTERN   = '*.snt'
-LIBRARY   = 'localLibrary'
-DATABASE  = 'sentences.db'
-CACHE     = 'sentences'
+MODEL    = 'nomic-embed-text'
+CREATE   = "CREATE TABLE sentences (title TEXT, item INT, sentence TEXT, embedding FLOAT[768] CHECK (TYPEOF(embedding)=='blob' AND VEC_LENGTH(embedding)==768))"
+INSERT   = "INSERT INTO sentences (title, item, sentence, embedding) VALUES (?, ?, ?, ?)"
+PATTERN  = '*.snt'
+LIBRARY  = 'localLibrary'
+DATABASE = 'sentences.db'
+CACHE    = 'sentences'
 
 # require
-from pandas                import read_csv
-from pathlib               import Path
-from rdr                   import configuration, ETC
-from re                    import sub
-from sentence_transformers import SentenceTransformer
-from sqlite_vec            import load
-from sqlite3               import connect
-from struct                import pack
-from sys                   import stderr, argv, exit
-from typing                import List
+from ollama     import embed
+from pandas     import read_csv
+from pathlib    import Path
+from rdr        import configuration, ETC
+from re         import sub
+from sqlite_vec import load
+from sqlite3    import connect
+from struct     import pack
+from sys        import stderr, argv, exit
+from typing     import List
 
 # get input
 if len( argv ) != 2 : exit( 'Usage: ' + argv[ 0 ] + " <carrel>" )
@@ -43,8 +43,7 @@ def serialize( vector: List[ float ] ) -> bytes : return pack( "%sf" % len( vect
 
 # initialize
 stderr.write( "Initializing\n" )
-embedder = SentenceTransformer( EMBEDDER )
-cache    = configuration( LIBRARY )/carrel/CACHE
+cache = configuration( LIBRARY )/carrel/CACHE
 
 # (re-)create database
 stderr.write( "Creating database\n" )
@@ -70,7 +69,7 @@ for file in cache.glob( PATTERN ) :
 	sentences = [ str( sentence ) for sentence in sentences ]
 	
 	# vectorize the sentences; cpu-intensive
-	embeddings = embedder.encode( sentences ).tolist()
+	embeddings = embed( model=MODEL, input=sentences ).model_dump( mode='json' )[ 'embeddings' ]
 
 	# process each sentence/embeddding combination
 	item = 0
