@@ -12,8 +12,8 @@
 # configure
 MODEL   = 'llama2'
 CONTEXT = './etc/cached-results.txt'
-PROMPT  = 'In a few short short sentences, address the question "%s" for a freshman at a college or university and using the following context: %s'
-SYSTEM  = 'You are a college or university professor.'
+PROMPT  = 'In a very few sentences, , address the question "%s" and use the following as context: %s'
+SYSTEM  = 'You are a college professor of very few words.'
 
 # require
 from ollama import generate
