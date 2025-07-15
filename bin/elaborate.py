@@ -12,7 +12,7 @@
 # configure
 MODEL        = 'llama2'
 CONTEXT      = './etc/cached-results.txt'
-PROMPT       = 'In a very few sentences, , address the question "%s" and use the following as context: %s'
+PROMPT       = 'Address the question "%s" and use the following as context: %s'
 SYSTEMPROMPT = './etc/system-prompt.txt'
 
 # require
@@ -30,5 +30,5 @@ prompt  = ( PROMPT % ( question, context ))
 
 # submit the work, output, and done
 result = generate( MODEL, prompt, system=system )
-print( result['response'] )
+print( result[ 'response' ] )
 exit()

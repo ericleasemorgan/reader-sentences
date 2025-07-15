@@ -13,7 +13,7 @@
 MODEL        = 'llama2'
 CONTEXT      = './etc/cached-results.txt'
 SYSTEMPROMPT = './etc/system-prompt.txt'
-PROMPT       = 'In a few short sentences, summarize the following context: %s'
+PROMPT       = 'Summarize the following context: %s'
 
 # require
 from ollama import generate
