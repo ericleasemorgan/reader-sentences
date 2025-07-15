@@ -10,10 +10,10 @@
 
 
 # configure
-MODEL   = 'llama2'
-CONTEXT = './etc/cached-results.txt'
-PROMPT  = 'In a very few sentences, , address the question "%s" and use the following as context: %s'
-SYSTEM  = 'You are a college professor of very few words.'
+MODEL        = 'llama2'
+CONTEXT      = './etc/cached-results.txt'
+PROMPT       = 'In a very few sentences, , address the question "%s" and use the following as context: %s'
+SYSTEMPROMPT = './etc/system-prompt.txt'
 
 # require
 from ollama import generate
@@ -24,10 +24,11 @@ if len( argv ) != 2 : exit( 'Usage: ' + argv[ 0 ] + " <question>" )
 question = argv[ 1 ]
 
 # initialize
+system  = open( SYSTEMPROMPT ).read()
 context = open( CONTEXT ).read()
 prompt  = ( PROMPT % ( question, context ))
 
 # submit the work, output, and done
-result = generate( MODEL, prompt, system=SYSTEM )
+result = generate( MODEL, prompt, system=system )
 print( result['response'] )
 exit()

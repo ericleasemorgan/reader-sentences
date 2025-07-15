@@ -10,10 +10,10 @@
 
 
 # configure
-MODEL   = 'llama2'
-CONTEXT = './etc/cached-results.txt'
-PROMPT  = 'In a few short sentences, summarize the following context: %s'
-SYSTEM  = 'You are a college professor of few words.'
+MODEL        = 'llama2'
+CONTEXT      = './etc/cached-results.txt'
+SYSTEMPROMPT = './etc/system-prompt.txt'
+PROMPT       = 'In a few short sentences, summarize the following context: %s'
 
 # require
 from ollama import generate
@@ -21,10 +21,11 @@ from sys    import exit
 
 # initialize
 context = open( CONTEXT ).read()
+system  = open( SYSTEMPROMPT ).read()
 prompt  = ( PROMPT % ( context ))
 
 # submit the work, output, and done
-try: response = generate( MODEL, prompt, system=SYSTEM )
+try: response = generate( MODEL, prompt, system=system )
 except ConnectionError : exit( 'Ollama is probably not running. Start it. Otherwise, call Eric.' )
 print( response[ 'response' ] )
 exit()
