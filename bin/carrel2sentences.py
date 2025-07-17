@@ -7,6 +7,7 @@
 
 # May  26, 2025 - trying yet again
 # June 18, 2025 - trapped file too big
+# July 17, 2025 - resized model if file too big
 
 
 # configure
