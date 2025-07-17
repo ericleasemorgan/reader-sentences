@@ -12,7 +12,7 @@
 # configure
 MODEL        = 'llama2'
 CONTEXT      = './etc/cached-results.txt'
-PROMPT       = 'Address the question "%s" and use the following as context: %s'
+PROMPT       = 'Answer the question "%s" and use only the following as the source of the answer: %s'
 SYSTEMPROMPT = './etc/system-prompt.txt'
 
 # require

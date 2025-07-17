@@ -40,9 +40,10 @@ def file2sentences( file, nlp, cache ) :
 	# get and normalize sentences
 	try : text      = nlp( text )
 	except ValueError :
-		stderr.write( 'File too big for processor. Call Eric\n' )
-		return
-		
+		stderr.write( 'Eric says, "Model too small for size of text. Resizing. Wish us luck."\n' )
+		nlp.max_length = ( len( text ) + 1 )
+		text = nlp( text )
+
 	sentences = list( text.sents )
 	sentences = [ sentence.text                 for sentence in sentences ]	
 	sentences = [ sentence.replace( '\t', ' ' ) for sentence in sentences ]
