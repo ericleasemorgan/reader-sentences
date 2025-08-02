@@ -12,7 +12,7 @@
 # configure
 MODEL        = 'llama3.1'
 CONTEXT      = './etc/cached-results.txt'
-PROMPT       = 'Answer the question "%s" and use only the following as the source of the answer: %s'
+PROMPT       = '%s Answer the question with either "yes" or "no" or "unknown", no other words, and use only the following as the source of the answer: %s'
 SYSTEMPROMPT = './etc/system-prompt.txt'
 
 # require

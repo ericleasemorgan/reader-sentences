@@ -4,3 +4,4 @@ etc/cached-query.txt
 etc/cached-cites.txt
 etc/cached-carrel.txt
 etc/system-prompt.txt
+__pycache__
