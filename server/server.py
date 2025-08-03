@@ -7,6 +7,7 @@
 
 # August 1, 2025 - first investigations
 # August 2, 2025 - added format, summarize, and elaborate as well as some templates
+# August 3, 2025 - made search a function; added semantics, keyword, nouns, and unigrams
 
 
 # configure
@@ -22,7 +23,7 @@ from markupsafe               import escape
 from math                     import exp
 from ollama                   import embed, generate
 from pandas                   import DataFrame
-from rdr                      import configuration, ETC
+from rdr                      import configuration, ETC, keywords, word2vec, pos, ngrams
 from re                       import sub
 from scipy.signal             import argrelextrema
 from sklearn.metrics.pairwise import cosine_similarity
@@ -33,6 +34,72 @@ from sys                      import argv, exit
 from typing                   import List
 import numpy                  as     np
 
+
+# the system's work horse
+def search( carrel, query, depth ) :
+
+	# configure
+	MODEL    = 'nomic-embed-text'
+	COLUMNS  = [ 'titles', 'items', 'sentences', 'distances' ]
+	SELECT   = "SELECT title, item, sentence, VEC_DISTANCE_L2(embedding, ?) AS distance FROM sentences ORDER BY distance LIMIT ?"
+	DATABASE = 'sentences.db'
+	LIBRARY  = 'localLibrary'
+
+	# initialize
+	library  = configuration( LIBRARY )
+	
+	# cache the carrel and query
+	with open( CACHEDCARREL, 'w' ) as handle : handle.write( carrel )
+	with open( CACHEDQUERY, 'w' )  as handle : handle.write( query )
+
+	# initialize some more
+	database = connect( library/carrel/ETC/DATABASE, check_same_thread=False )
+	database.enable_load_extension( True )
+	load( database )
+
+	# vectorize query and search; get a set of matching records
+	query   = embed( model=MODEL, input=query ).model_dump( mode='json' )[ 'embeddings' ][ 0 ]
+	records = database.execute( SELECT, [ serialize( query ), depth ] ).fetchall()
+	
+	# process each result; create a list of sentences
+	sentences = []
+	for record in records :
+	
+		# parse
+		title    = record[ 0 ]
+		item     = record[ 1 ]
+		sentence = record[ 2 ]
+		distance = record[ 3 ]
+		
+		# update
+		sentences.append( [title, item, sentence, distance ] )
+	
+	# create a dataframe of the sentences and sort by title
+	sentences = DataFrame( sentences, columns=COLUMNS )
+	sentences = sentences.sort_values( [ 'titles', 'items' ] )
+
+	# process/output each sentence; along the way, create a cache
+	results = []
+	cites   = []
+	for index, result in sentences.iterrows() :
+	
+		# parse
+		title    = result[ 'titles' ]
+		item     = result[ 'items' ]
+		sentence = result[ 'sentences' ]
+		
+		# update the caches
+		results.append( sentence )
+		cites.append( '\t'.join( [ title, str( item ) ] ) )
+		
+	# save the remaining caches
+	with open( CACHEDCITES, 'w' )   as handle : handle.write( '\n'.join( cites ) )
+	with open( CACHEDRESULTS, 'w' ) as handle : handle.write( '\n'.join( results ) )
+
+	# format the result and done
+	results = ' '.join( results )
+	return( results )
+	
 
 # serializes a list of floats into a compact "raw bytes" format; makes things more efficient?
 def serialize( vector: List[float]) -> bytes : return pack( "%sf" % len( vector ), *vector )
@@ -72,7 +139,6 @@ def activate_similarities( similarities:np.array, p_size=10 )->np.array :
 # configure
 server = Flask(__name__)
 
-
 # home
 @server.route("/")
 def home() : return 'There is only three things here:</p><ol><li> a link to the <a href="./search?carrel=moby&query=ahab&depth=32">search</a> page</li><li>a link to <a href="./format/">formatting</a> the results</li><li><a href="./summarize/">summarize</a></li><li><a href="./elaborate/">elaborate</a></li></ol>'
@@ -87,7 +153,7 @@ def elaborate() :
 	PROMPT = 'Answer the question "%s" and use only the following as the source of the answer: %s'
 
 	# get input
-	question = request.args.get('question', 'How did Ahab loose his leg?')
+	question = request.args.get('question', 'What is knowledge?')
 	
 	# initialize
 	context = open( CACHEDRESULTS ).read()
@@ -170,77 +236,103 @@ def format() :
 	return render_template('format.htm', results=text )
 
 
-# search
+# search, simple
 @server.route("/search/")
-def search() :
+def searchSimple() :
 
-	# configure
-	MODEL    = 'nomic-embed-text'
-	COLUMNS  = [ 'titles', 'items', 'sentences', 'distances' ]
-	SELECT   = "SELECT title, item, sentence, VEC_DISTANCE_L2(embedding, ?) AS distance FROM sentences ORDER BY distance LIMIT ?"
-	DATABASE = 'sentences.db'
-	LIBRARY  = 'localLibrary'
-
-	# initialize
-	library  = configuration( LIBRARY )
-	
 	# get input
 	carrel = request.args.get('carrel', '')
 	query  = request.args.get('query', '')
 	depth  = request.args.get('depth', '')
-		
-	# cache the carrel and query
-	with open( CACHEDCARREL, 'w' ) as handle : handle.write( carrel )
-	with open( CACHEDQUERY, 'w' ) as handle  : handle.write( query )
 
-	# initialize some more
-	database = connect( library/carrel/ETC/DATABASE, check_same_thread=False )
-	database.enable_load_extension( True )
-	load( database )
-
-	# vectorize query and search; get a set of matching records
-	query   = embed( model=MODEL, input=query ).model_dump( mode='json' )[ 'embeddings' ][ 0 ]
-	records = database.execute( SELECT, [ serialize( query ), depth ] ).fetchall()
+	# search
+	results = search( carrel, query, depth )
 	
-	# process each result; create a list of sentences
-	sentences = []
-	for record in records :
-	
-		# parse
-		title    = record[ 0 ]
-		item     = record[ 1 ]
-		sentence = record[ 2 ]
-		distance = record[ 3 ]
-		
-		# update
-		sentences.append( [title, item, sentence, distance ] )
-	
-	# create a dataframe of the sentences and sort by title
-	sentences = DataFrame( sentences, columns=COLUMNS )
-	sentences = sentences.sort_values( [ 'titles', 'items' ] )
-
-	# process/output each sentence; along the way, create a cache
-	results = []
-	cites   = []
-	for index, result in sentences.iterrows() :
-	
-		# parse
-		title    = result[ 'titles' ]
-		item     = result[ 'items' ]
-		sentence = result[ 'sentences' ]
-		
-		# update the caches
-		results.append( sentence )
-		cites.append( '\t'.join( [ title, str( item ) ] ) )
-		
-	# save the remaining caches
-	with open( CACHEDCITES, 'w' )   as handle : handle.write( '\n'.join( cites ) )
-	with open( CACHEDRESULTS, 'w' ) as handle : handle.write( '\n'.join( results ) )
-
-	# format the result and done
-	results = ' '.join( results )
-	
-	#return( sentences )
+	# done
 	return render_template('search.htm', results=results)
+
+
+# search, keywords
+@server.route("/search-with-keywords/")
+def searchKeywords() :
+
+	# get input
+	carrel  = request.args.get('carrel', 'homer')
+	breadth = int( request.args.get('breadth', '8') )
+	depth   = request.args.get('depth', '32')
+
+	# create a query rooted in the breadth-number of keywords
+	words = keywords( carrel, count=True ).splitlines()[ :breadth ]
+	words = [ word.split('\t')[ 0 ] for word in words ]
+	query = ' '.join( words )
 	
+	# search
+	results = search( carrel, query, depth )
 	
+	# done
+	return render_template( 'search-with-keywords.htm', results=results )
+
+
+# search, unigrams
+@server.route("/search-with-unigrams/")
+def searchUnigrams() :
+
+	# get input
+	carrel  = request.args.get('carrel', 'homer')
+	breadth = int( request.args.get('breadth', '16') )
+	depth   = request.args.get('depth', '32')
+
+	# create a query rooted in the breadth-number of keywords
+	words = ngrams( carrel, count=True ).splitlines()[ :breadth]
+	words = [ word.split('\t')[ 0 ] for word in words ]
+	query = ' '.join( words )
+		
+	# search
+	results = search( carrel, query, depth )
+	
+	# done
+	return render_template( 'search-with-unigrams.htm', results=results )
+
+
+# search, semantics
+@server.route("/search-with-semantics/")
+def searchSemantics() :
+
+	# get input
+	carrel  = request.args.get( 'carrel', 'knowledge' )
+	word    = request.args.get( 'word', 'knowledge' )
+	breadth = int( request.args.get( 'breadth', '8') )
+	depth   = request.args.get( 'depth', '16' )
+
+	# create a query rooted in the breadth-number of semantically related words
+	words = word2vec( carrel, query=word, topn=breadth ).splitlines()
+	words = [ word.split( '\t' )[ 0 ] for word in words ]
+	query = ' '.join( words )
+		
+	# search
+	results = search( carrel, query, depth )
+	
+	# done
+	return render_template( 'search-with-semantics.htm', results=results )
+
+
+# search, nouns
+@server.route("/search-with-nouns/")
+def searchNouns() :
+
+	# get input
+	carrel  = request.args.get( 'carrel', 'knowledge' )
+	breadth = int( request.args.get( 'breadth', '16') )
+	depth   = request.args.get( 'depth', '32' )
+
+	# create a query rooted in the breadth-number of semantically related words
+	words = pos( carrel, select='words', like='N', count=True ).splitlines()[ :breadth ]
+	words = [ word.split( '\t' )[ 0 ] for word in words ]
+	query = ' '.join( words )
+	
+	# search
+	results = search( carrel, query, depth )
+	
+	# done
+	return render_template( 'search-with-nouns.htm', results=results )
+
