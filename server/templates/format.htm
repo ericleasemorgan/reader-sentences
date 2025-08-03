@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+
+	<head>
+		<title>Results Formatted</title>
+	</head>
+	
+	<body style='margin:7%'>
+
+	{% if results %}
+
+	  <h1>Results Formatted</h1>
+	  <blockquote>{{results|safe}}</blockquote>
+
+	{% else %}
+	  <h1>Hello, World!</h1>
+
+	{% endif %}
+
+	</body>
+	
+</html>

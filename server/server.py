@@ -6,7 +6,7 @@
 # (c) Infomotions, LLC; distributed under a GNU Public License
 
 # August 1, 2025 - first investigations
-# August 2, 2025 - added format, summarize, and elaborate
+# August 2, 2025 - added format, summarize, and elaborate as well as some templates
 
 
 # configure
@@ -18,6 +18,7 @@ SYSTEMPROMPT  = './etc/system-prompt.txt'
 
 # require
 from flask                    import Flask, render_template, request
+from markupsafe               import escape
 from math                     import exp
 from ollama                   import embed, generate
 from pandas                   import DataFrame
@@ -86,7 +87,7 @@ def elaborate() :
 	PROMPT = 'Answer the question "%s" and use only the following as the source of the answer: %s'
 
 	# get input
-	question = request.args.get('question', 'What is knowledge?')
+	question = request.args.get('question', 'How did Ahab loose his leg?')
 	
 	# initialize
 	context = open( CACHEDRESULTS ).read()
@@ -98,10 +99,11 @@ def elaborate() :
 
 	# reformat the results
 	response = sub( '\n\n', '</p><p>', result[ 'response' ] ) 
-	response = '<blockquote><p>' + response + '</p></blockquote>'
+	response = '<p>' + response + '</p>'
 
 	# done
-	return( response )
+	#return( response )
+	return render_template('elaborate.htm', results=response )
 
 
 # summarize
@@ -121,9 +123,10 @@ def summarize() :
 	except ConnectionError : exit( 'Ollama is probably not running. Start it. Otherwise, call Eric.' )
 	
 	response = sub( '\n\n', '</p><p>', results[ 'response' ] ) 
-	results = '<blockquote><p>' + response + '</p></blockquote>'
+	results = '<p>' + response + '</p>'
 
-	return( response )
+	#return( response )
+	return render_template('summarize.htm', results=results )
 
 
 # format
@@ -160,10 +163,11 @@ def format() :
 
 	# do the tiniest bit of normalization
 	text = sub( ' +', ' ', text ) 
-	text = '<blockquote><p>' + sub( '\n\n', '</p><p>', text ) + '</p></blockquote>'
+	text = '<p>' + sub( '\n\n', '</p><p>', text ) + '</p>'
 
 	# done
-	return( text )
+	#return( sentences )
+	return render_template('format.htm', results=text )
 
 
 # search
@@ -234,8 +238,9 @@ def search() :
 	with open( CACHEDRESULTS, 'w' ) as handle : handle.write( '\n'.join( results ) )
 
 	# format the result and done
-	sentences = '<blockquote>' + ' '.join( results ) + '</blockquote>'
-	return( sentences )
+	results = ' '.join( results )
 	
+	#return( sentences )
+	return render_template('search.htm', results=results)
 	
 	
