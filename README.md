@@ -9,7 +9,7 @@ Reader Sentences
 Introduction
 ------------
 
-This directory contains a suite of software used to index and then search databases of sentences, and its purpose is to faciliate a question/answer interface to Distant Reader study carrels. For example, you could ask the system "Who killed Hector?" and get back an answer something like this:
+This directory contains a suite of software used to index and then search databases of sentences, and its purpose is to facilitate a question/answer interface to Distant Reader study carrels. For example, you could ask the system "Who killed Hector?" and get back an answer something like this:
 
 > In the context of the story, it is clear that Hector was killed by
 Achilles. The passage mentions several instances where Hector is injured
@@ -35,7 +35,7 @@ only be realized through face-to-face encounters with others.
 
 **Very important!** This system is not intended nor expected to return <em>the</em> answers to given questions. Instead it is intended to return <em>plausible</em> answers, and you are expected to use the results as discussion points or to use traditional reading techniques for the purpose of verification.
 
-Think of this system as a tool to suppliment your reading. Create a collection of texts, index (model) the collection, search the index, interact with the model, and in the end, garner a better understanding of the collection. Think of the whole process as a sort of interactive discussion with a book. As such, this system implemements a form of reading. 
+Think of this system as a tool to supplement your reading. Create a collection of texts, index (model) the collection, search the index, interact with the model, and in the end, garner a better understanding of the collection. Think of the whole process as a sort of interactive discussion with a book. As such, this system implements a form of reading. 
 
 
 (Not So) Quick Start
@@ -67,13 +67,21 @@ The next step is to vectorize ("index") the sentences:
 
 	./bin/vectorize.py author-homer-gutenberg
 	
-Again, it is quite likely you will have missing Python modules and/or you will have missing HuggingFace models. Do your best to install the modules. To resolve the issues with the HuggingFace models, create a HuggingFace account, get a HuggingFace token, and create an environment variable with the name "HF_TOKEN" and with the token's value. Repeat the previous step, and please be patient; this step is computationally expensive.
+Again, it is quite likely you will have missing Python modules and/or you do not have Ollama installed. Do your best to install [Ollama](https://ollama.com). You will also need to install two large language models: 1) nomic-embed-text, and 2) llama2. First, nomic-embed-text:
+
+    ollama pull nomic-embed-text:latest
+
+And then llama2:
+
+    ollama pull llama2:latest
+
+Repeat the previous step, and please be patient; these steps are computationally expensive.
 
 Once you get this far, you can query the database of vectorized sentences. The following command queries the study carrel named "author-homer-gutenberg" for the word "hector" and returns thirty-two sentences:
 
 	./bin/search.sh author-homer-gutenberg hector 32
 
-The result ought be a long paragraph thirty-two sentences in length. Each sentece ought to allude to Hector in some way, shape, or form.
+The result ought be a long paragraph thirty-two sentences in length. Each sentence ought to allude to Hector in some way, shape, or form.
 
 One way to make more sense of the long paragraph is to divide it into smaller paragraphs, like this:
 
@@ -82,8 +90,6 @@ One way to make more sense of the long paragraph is to divide it into smaller pa
 Another way to make more sense of the long paragarph is to use a large-language model to summarize it:
 
 	./bin/summarize.sh
-
-The previous step requires the installation of [Ollama](https://ollama.com) and a large-language model called "[Llama2](https://ollama.com/library/llama2)". Alas?
 
 Finally, you can use the following command to actually submit a question to be addressed by the system. For example:
 
@@ -106,7 +112,7 @@ This suite of software is made up many little Python scripts and Bash front-ends
 
 * `./bin/summarize.py` - takes the cached result of `./bin/search.py`, and uses a large-language model to summarize the cache
 
-* `./bin/elaborate.py` - given a query in the form of a question, uses the cached result of `./bin/search.py` to address the given question; as such, this script is a simple implemenation of a retrieval-augmented generation (RAG) application
+* `./bin/elaborate.py` - given a query in the form of a question, uses the cached result of `./bin/search.py` to address the given question; as such, this script is a simple implementation of a retrieval-augmented generation (RAG) application
 
 The following scripts are front-ends to their Python equivalents, and all they really do is add some formatting to the outputs:
 
@@ -131,7 +137,6 @@ Queries can be of just about any length and require zero syntax. That said, it i
 
 * `./bin/search-with-semantics.sh` - given a carrel, a word, an integer (I), and other integer (D), identify the N-most semantically related words to the given word, uses the given word and the related words as the query to `./bin/search.py`, and returns D sentences
 
-
 In natural language processing, a set of stop words is a list of words with no or little importance. Examples usually include the words "the", "a", "an", "of", etc. Conversely, one might articulate a list of very useful words -- word of great significance. Such a set of words is sometimes called a "lexicon". If you create a file named `./etc/lexicon.txt` within your study carrel(s), then the following scripts will use that file as they query part of the input:
 
 * `./bin/search-with-lexicon.sh` - given a study carrel and an integer (D), use the carrel's lexicon as the query for `./bin/search.py` and outputs D sentences
@@ -142,11 +147,11 @@ In natural language processing, a set of stop words is a list of words with no o
 
 * `./bin/search-with-verb.sh` - a front-end to `./bin/search-with-verb.py`, and merely adds some formatting to the output
 
-The curation of lexicons is a thing all to itself. See [Reader Lexicons[(https://github.com/ericleasemorgan/reader-lexicons) for ways to create more expressive lexicons.
+The curation of lexicons is a thing all to itself. See [Reader Lexicons](https://github.com/ericleasemorgan/reader-lexicons) for ways to create more expressive lexicons.
 
-The following two scripts help you to define words. They do not output <em>the</em> defintion of words but rather <em>plausible</em> definitions:
+The following two scripts help you to define words. They do not output <em>the</em> definitions of words but rather <em>plausible</em> definitions:
 
-* `./bin/define.py` - given a carrel and a words, finds all sentences containing the given word, uses the Lesk Algorithm to predict the word's defintion, and outputs possible defintions of the word and their frequencies
+* `./bin/define.py` - given a carrel and a words, finds all sentences containing the given word, uses the Lesk Algorithm to predict the word's definitions, and outputs possible definitions of the word and their frequencies
 
 * `./bin/concordance.sh` - given the name of a study carrel and a word/phrase, output a list of sentence-like thing containing the word/phrase
 
@@ -155,7 +160,6 @@ The following are miscellaneous scripts:
 * `./bin/pose-a-question.py` - given the name of a carrel, randomly select a question from it's database of sentences
 
 * `./bin/cites.py` - given the word "human", "csv", or "json", output bibliographic information describing whence the sentences came; good for learning what study carrel item to do close reading against
-
 
 The following scripts are just for fun. They employ a Markov modeling technique to pseudo-randomly generate sentences. Use these scripts to become familiar with the common bigrams (two-word phrases) in the given carrel.
 
@@ -179,7 +183,7 @@ First, you must ask yourself some sort of question. Given a study carrel, what d
 	./bin/carrel2sentences.py author-homer-gutenberg
 	./bin/vectorize.py author-homer-gutenberg
 
-Again, please be patient. The vectorizing process is computationally expensive. On my Macintosh laptop with eight cores, the vectorizingn process takes about five minutes. Your milage will vary.
+Again, please be patient. The vectorizing process is computationally expensive. On my Macintosh laptop with eight cores, the vectorizing process takes about five minutes. Your milage will vary.
 
 The next step is to begin querying the study carrel, and I always suggest starting out very small. Consequently I will query the study carrel for a single word and request a single sentence:
 
@@ -189,7 +193,7 @@ I get the following result, it is merely the sentence which is most like the que
 
 > The death of Hector.
 
-I then increase the number of sentences to return, and I suggest you always double the value. Thus, the following commnand identifies the two sentences most closely matching the query:
+I then increase the number of sentences to return, and I suggest you always double the value. Thus, the following command identifies the two sentences most closely matching the query:
 
 	./bin/search.sh author-homer-gutenberg hector 2
 
@@ -302,7 +306,7 @@ Get even more context:
 
 	./bin/search.sh author-homer-gutenberg 'ulysses penelope' 4
 
-Aparently Penelope is admireable and has an excellent nature, and if you read closely Ulysses calls Penelope "wife":
+Apparently Penelope is admirable and has an excellent nature, and if you read closely Ulysses calls Penelope "wife":
 
 > Not that your wife, Ulysses, is likely to murder you, for Penelope is a very admirable woman, and has an excellent nature.  " Penelope was moved still more deeply as she heard the indisputable proofs that Ulysses laid before her; and when she had again found relief in tears she said to him," Stranger, I was already disposed to pity you, but henceforth you shall be honoured and made welcome in my house.  PENELOPE EVENTUALLY RECOGNISES HER HUSBAND—EARLY IN THE MORNING ULYSSES, TELEMACHUS, EUMAEUS, AND PHILOETIUS LEAVE THE TOWN. On this, Ulysses rose from his comfortable bed and said to Penelope," Wife, we have both of us had our full share of troubles, you, here, in lamenting my absence, and I in being prevented from getting home though I was longing all the time to do so.
 
@@ -336,9 +340,9 @@ A few possible next steps include:
 Summary
 -------
 
-This suite of software is as tool for reading. Create and/or download Distant Reader study carrels ("data sets"). Extract and cache all of the sentences in all of the items in the carrel. Vectorize (index/model) them. Use the scripts in this distribution to query the sentences and thus become familar with the carrel's content. Compare and contrast the results from one study carrel with the results from another study carrel. Use the outputs of these scripts as points of dicussion with other people.
+This suite of software is as tool for reading. Create and/or download Distant Reader study carrels ("data sets"). Extract and cache all of the sentences in all of the items in the carrel. Vectorize (index/model) them. Use the scripts in this distribution to query the sentences and thus become familiar with the carrel's content. Compare and contrast the results from one study carrel with the results from another study carrel. Use the outputs of these scripts as points of discussion with other people.
 
-Finally, while they system uses various techniques to riff on the search results, do your best to closely read the search results before you summarize or elaborate. It is your responsibility to figure out the degree any of the underlying large-language models are halucinating. Again, the system does not output <em>the</em> answer but instead it outputs <em>plausible</em> answers.
+Finally, while the system uses various techniques to riff on the search results, do your best to closely read the search results before you summarize or elaborate. It is your responsibility to figure out the degree any of the underlying large-language models are hallucinating. Again, the system does not output <em>the</em> answer but instead it outputs <em>plausible</em> answers.
 
 
 ---
