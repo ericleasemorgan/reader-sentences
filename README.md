@@ -41,7 +41,7 @@ Think of this system as a tool to supplement your reading. Create a collection o
 (Not So) Quick Start
 --------------------
 
-First, you will need to install the Distant Reader Toolbox:
+First, you will need to install the Distant Reader Toolbox, and if you get past this step, then the rest ought to be relatively easy (famous last words):
 
     pip install reader-toolbox
 
@@ -75,7 +75,7 @@ And then llama2:
 
     ollama pull llama2:latest
 
-Repeat the previous step, and please be patient; these steps are computationally expensive.
+Repeat the previous steps, and please be patient; these steps are computationally expensive.
 
 Once you get this far, you can query the database of vectorized sentences. The following command queries the study carrel named "author-homer-gutenberg" for the word "hector" and returns thirty-two sentences:
 
@@ -87,7 +87,7 @@ One way to make more sense of the long paragraph is to divide it into smaller pa
 
 	./bin/format.sh
 
-Another way to make more sense of the long paragarph is to use a large-language model to summarize it:
+Another way to make more sense of the long paragraph is to use a large-language model to summarize it:
 
 	./bin/summarize.sh
 
@@ -133,9 +133,9 @@ Queries can be of just about any length and require zero syntax. That said, it i
 
 * `./bin/search-with-keywords.sh` - just like `./bin/search-with-unigrams.sh` but identifies the given carrel's N-most frequent keywords instead of unigrams
 
-* `./bin/search-with-entities.sh` - given the name of a carrel, the value "PERSON" or "ORG", an integer (N), and another integer (D), identify the given carrel's N-most frequent persons or organizations, uses them as the query for `./bin/search.py`, and returns D sentences
+* `./bin/search-with-entities.sh` - given the name of a carrel, a value of "PERSON" or of "ORG", an integer (N), and another integer (D), identify the given carrel's N-most frequent persons or organizations, uses them as the query for `./bin/search.py`, and returns D sentences
 
-* `./bin/search-with-semantics.sh` - given a carrel, a word, an integer (I), and other integer (D), identify the N-most semantically related words to the given word, uses the given word and the related words as the query to `./bin/search.py`, and returns D sentences
+* `./bin/search-with-semantics.sh` - given a carrel, a word, an integer (I), and other integer (D), identify the I-most semantically related words to the given word, uses the given word and the related words as the query to `./bin/search.py`, and returns D sentences
 
 In natural language processing, a set of stop words is a list of words with no or little importance. Examples usually include the words "the", "a", "an", "of", etc. Conversely, one might articulate a list of very useful words -- word of great significance. Such a set of words is sometimes called a "lexicon". If you create a file named `./etc/lexicon.txt` within your study carrel(s), then the following scripts will use that file as they query part of the input:
 
@@ -153,7 +153,7 @@ The following two scripts help you to define words. They do not output <em>the</
 
 * `./bin/define.py` - given a carrel and a words, finds all sentences containing the given word, uses the Lesk Algorithm to predict the word's definitions, and outputs possible definitions of the word and their frequencies
 
-* `./bin/concordance.sh` - given the name of a study carrel and a word/phrase, output a list of sentence-like thing containing the word/phrase
+* `./bin/concordance.sh` - given the name of a study carrel and a word/phrase, output a list of sentence-like things containing the word/phrase
 
 The following are miscellaneous scripts:
 
