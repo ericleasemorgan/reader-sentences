@@ -38,7 +38,8 @@
 <p>
 	Next, you will need to install the Reader Sentences scripts:
 </p>
-<quote> <emph rend="code">git pull https://github.com/ericleasemorgan/reader-sentences.git</emph> </quote> 
+<quote> <emph rend="code">git pull https://github.com/ericleasemorgan/reader-sentences.git</emph> </quote>
+<p>(Because zero websites, let alone URLs, are permanent, I have cached the Reader Sentences software at <xref url='https://distantreader.org/blog/reader-sentences/reader-sentences.zip'>https://distantreader.org/blog/reader-sentences/reader-sentences.zip</xref>, just in case.)</p>
 <p>
 	Change directories to the just downloaded repository:
 </p>
