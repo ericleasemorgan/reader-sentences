@@ -10,7 +10,7 @@
 
 
 # configure
-MODEL        = 'llama2'
+MODEL        = 'deepseek-v3.1:671b-cloud'
 CONTEXT      = './etc/cached-results.txt'
 SYSTEMPROMPT = './etc/system-prompt.txt'
 PROMPT       = 'Summarize the following context: %s'

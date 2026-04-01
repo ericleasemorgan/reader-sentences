@@ -10,7 +10,7 @@
 
 
 # configure
-MODEL        = 'llama3.1'
+MODEL        = 'deepseek-v3.1:671b-cloud'
 CONTEXT      = './etc/cached-results.txt'
 PROMPT       = 'Answer the question "%s" and use only the following as the source of the answer: %s'
 SYSTEMPROMPT = './etc/system-prompt.txt'

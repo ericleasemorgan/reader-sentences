@@ -6,26 +6,31 @@
 # Eric Lease Morgan <emorgan@nd.edu>
 # (c) University of Notre Dame; distributed under a GNU Public License
 
-# May 16, 2025 - with a lack of hearing, a FOC, and because the CRC machines were under maintence
-# May 17, 2025 - migrated to Euclidian (VEC_DISTANCE_L2) distances
-# May 22, 2025 - added title of item and item (sentence) number to database
-# June 7, 2025 - normalized sentences so they are always strings
-# July 4, 2025 - using a new embedder; actually moved to Ollama
+# May   16, 2025 - with a lack of hearing, a FOC, and because the CRC machines were under maintence
+# May   17, 2025 - migrated to Euclidian (VEC_DISTANCE_L2) distances
+# May   22, 2025 - added title of item and item (sentence) number to database
+# June   7, 2025 - normalized sentences so they are always strings
+# July   4, 2025 - using a new embedder; actually moved to Ollama
+# March 30, 2026 - started caching vectors as a file
+# March 31, 2026 - started caching vectors in the database
 
 
 # configure
 MODEL    = 'nomic-embed-text'
-CREATE   = "CREATE TABLE sentences (title TEXT, item INT, sentence TEXT, embedding FLOAT[768] CHECK (TYPEOF(embedding)=='blob' AND VEC_LENGTH(embedding)==768))"
-INSERT   = "INSERT INTO sentences (title, item, sentence, embedding) VALUES (?, ?, ?, ?)"
+CREATE   = "CREATE TABLE sentences (title TEXT, item INT, sentence TEXT, vector TEXT, embedding FLOAT[768] CHECK (TYPEOF(embedding)=='blob' AND VEC_LENGTH(embedding)==768))"
+INSERT   = "INSERT INTO sentences (title, item, sentence, vector, embedding) VALUES (?, ?, ?, ?, ?)"
 PATTERN  = '*.snt'
 LIBRARY  = 'localLibrary'
 DATABASE = 'sentences.db'
 CACHE    = 'sentences'
+#VECTORS  = 'vectors.pkl'
 
 # require
+from numpy      import array
 from ollama     import embed
 from pandas     import read_csv
 from pathlib    import Path
+from pickle     import dump
 from rdr        import configuration, ETC
 from re         import sub
 from sqlite_vec import load
@@ -57,7 +62,7 @@ database.execute( CREATE )
 # process each text in the given carrel
 stderr.write( "Indexing texts\n" )
 count = 0
-for file in cache.glob( PATTERN ) :
+for index, file in enumerate( cache.glob( PATTERN ) ):
 	
 	# increment and debug
 	title =  file.stem
@@ -70,17 +75,22 @@ for file in cache.glob( PATTERN ) :
 	
 	# vectorize the sentences; cpu-intensive
 	embeddings = embed( model=MODEL, input=sentences ).model_dump( mode='json' )[ 'embeddings' ]
-
+	
 	# process each sentence/embeddding combination
 	item = 0
 	for sentence, embedding in zip( sentences, embeddings ) :
 		
 		# do the inserts
 		item += 1
-		database.execute( INSERT, [ title, item, sentence, serialize( embedding ) ] )	
-
-# commit, close, and done
+		database.execute( INSERT, [ title, item, sentence, repr( embedding ), serialize( embedding ) ] )	
+	
+# commit and close
 database.commit()
 database.close()
+
+# cache vectors; maybe ought to save to the database but I don't know how
+#with open( configuration( LIBRARY )/carrel/ETC/VECTORS, 'wb' ) as handle : dump( array( embeddings ), handle )
+
+# done
 exit()
 
