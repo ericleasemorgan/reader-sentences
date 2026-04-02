@@ -16,7 +16,7 @@ CACHE   = 'etc'
 VECTORS = 'vectors.pkl'
 
 # require
-from matplotlib.pyplot     import scatter, show, figure
+from matplotlib.pyplot     import scatter, show, figure, savefig
 from pathlib               import Path
 from pickle                import load
 from sys                   import stderr, argv, exit
@@ -52,7 +52,7 @@ elif components == 3 :
 else : exit( 'Invalid value for components (%s). Call Eric.' % str( components ) )
 
 # output and done
-show()
+savefig( '/home/emorgan/practice.png' )
 exit()
 
 

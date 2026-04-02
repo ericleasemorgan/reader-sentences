@@ -59,6 +59,6 @@ elif components == 3 :
 	figure.scatter( centroids[ :,0 ], centroids[ :,1 ], centroids[ :,2 ], marker='x', s=200, linewidths=3, color='red' )
 
 # done
-plt.show()
+plt.savefig( '/home/emorgan/pracrice.png' )
 exit()
 

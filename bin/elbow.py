@@ -14,7 +14,7 @@ VECTORS    = 'vectors.pkl'
 RANGE      = 16
 COMPONENTS = 2
 
-from matplotlib.pyplot     import plot, grid, show
+from matplotlib.pyplot     import plot, grid, show, savefig 
 from pathlib               import Path
 from pickle                import load
 from sklearn.cluster       import KMeans
@@ -39,5 +39,5 @@ plot( range( 1, RANGE ), inertia, marker='o' )
 grid( True )
 
 # output and done
-show()
+savefig( '/home/emorgan/pracrice.png' )
 exit()
