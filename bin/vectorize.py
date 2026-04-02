@@ -13,7 +13,8 @@
 # July   4, 2025 - using a new embedder; actually moved to Ollama
 # March 30, 2026 - started caching vectors as a file
 # March 31, 2026 - started caching vectors in the database
-
+# April  2, 2026 - doubled the default value for num_ctx (2048) to 4096
+ 
 
 # configure
 MODEL    = 'nomic-embed-text'
@@ -23,7 +24,8 @@ PATTERN  = '*.snt'
 LIBRARY  = 'localLibrary'
 DATABASE = 'sentences.db'
 CACHE    = 'sentences'
-#VECTORS  = 'vectors.pkl'
+VECTORS  = 'vectors.pkl'
+CONTEXT = 4096
 
 # require
 from numpy      import array
@@ -74,7 +76,7 @@ for index, file in enumerate( cache.glob( PATTERN ) ):
 	sentences = [ str( sentence ) for sentence in sentences ]
 	
 	# vectorize the sentences; cpu-intensive
-	embeddings = embed( model=MODEL, input=sentences ).model_dump( mode='json' )[ 'embeddings' ]
+	embeddings = embed( model=MODEL, input=sentences, options={ 'num_ctx':CONTEXT } ).model_dump( mode='json' )[ 'embeddings' ]
 	
 	# process each sentence/embeddding combination
 	item = 0
@@ -88,8 +90,8 @@ for index, file in enumerate( cache.glob( PATTERN ) ):
 database.commit()
 database.close()
 
-# cache vectors; maybe ought to save to the database but I don't know how
-#with open( configuration( LIBRARY )/carrel/ETC/VECTORS, 'wb' ) as handle : dump( array( embeddings ), handle )
+# cache vectors to the carrel as a file; the etc directory is becoming bloated
+with open( configuration( LIBRARY )/carrel/ETC/VECTORS, 'wb' ) as handle : dump( array( embeddings ), handle )
 
 # done
 exit()
