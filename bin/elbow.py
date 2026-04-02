@@ -6,6 +6,7 @@
 # (c) Infomotions, LLC; distributed under a GNU Public License
 
 # March 18, 2026 - first documentation, but written a few days ago
+# April  2, 2026 - reading vectors from local cache and saving plot to figures
 
 
 # configure

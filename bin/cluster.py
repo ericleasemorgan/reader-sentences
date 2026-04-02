@@ -9,11 +9,14 @@
 # March 18, 2026 - first documentation, but written a few days ago
 # March 20, 2026 - started using Sci-Kit Learn
 # March 31, 2026 - removed scaling, and required component input
+# April  2, 2026 - reading vectors from local cache and saving plot to figures
 
 
 # configure
-VECTORS     = 'vectors.pkl'
-CACHE       = 'etc'
+VECTORS   = 'vectors.pkl'
+LIBRARY   = 'localLibrary'
+CLUSTERS2 = 'vectors-clusters-2.png'
+CLUSTERS3 = 'vectors-clusters-3.png'
 
 # require
 from pathlib               import Path
@@ -22,17 +25,16 @@ from sklearn.cluster       import KMeans
 from sklearn.decomposition import PCA
 from sys                   import argv, exit
 import matplotlib.pyplot   as plt
+from rdr                   import configuration, ETC, FIGURES
 
 # get input
-if len( argv ) != 3 : exit( 'Usage: ' + argv[ 0 ] + " <clusters> <2|3>" )
-clusters   = int( argv[ 1 ] )
-components = int( argv[ 2 ] )
-
-# initialize
-cache = Path( CACHE )
+if len( argv ) != 4 : exit( 'Usage: ' + argv[ 0 ] + " <carrel> <clusters> <2|3>" )
+carrel     = argv[ 1 ]
+clusters   = int( argv[ 2 ] )
+components = int( argv[ 3 ] )
 
 # load the previously created projections
-with open( cache/VECTORS, 'rb' ) as handle: X = load( handle )
+with open( configuration( LIBRARY)/carrel/ETC/VECTORS, 'rb' ) as handle: X = load( handle )
 
 # initialize the kmeans, fit, and cache
 model = KMeans( n_clusters=clusters, init='k-means++' ).fit( X )
@@ -50,6 +52,7 @@ if components == 2 :
 
 	plt.scatter( X[ :,0 ], X[ :,1 ], s=2, c=labels )
 	plt.scatter( centroids[ :,0 ], centroids[ :,1 ], marker='x', s=200, linewidths=3, color='red' )
+	plt.savefig( configuration( LIBRARY)/carrel/FIGURES/CLUSTERS2  )
 
 elif components == 3 :
 
@@ -57,8 +60,8 @@ elif components == 3 :
 	figure = figure.add_subplot( 111, projection='3d' )
 	figure.scatter( X[ :,0 ], X[ :,1 ], X[ :,2 ], s=2, c=labels )
 	figure.scatter( centroids[ :,0 ], centroids[ :,1 ], centroids[ :,2 ], marker='x', s=200, linewidths=3, color='red' )
+	plt.savefig( configuration( LIBRARY)/carrel/FIGURES/CLUSTERS3  )
 
 # done
-plt.savefig( '/home/emorgan/pracrice.png' )
 exit()
 
