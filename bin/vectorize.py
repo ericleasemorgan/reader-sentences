@@ -28,6 +28,7 @@ LIBRARY  = 'localLibrary'
 DATABASE = 'sentences.db'
 CACHE    = 'sentences'
 VECTORS  = 'vectors.pkl'
+NUMCTX   = 4096
 
 # require
 from numpy      import array
@@ -78,7 +79,7 @@ for index, file in enumerate( cache.glob( PATTERN ) ):
 	sentences = [ str( sentence ) for sentence in sentences ]
 	
 	# vectorize the sentences; cpu-intensive
-	embeddings = embed( model=MODEL, input=sentences ).model_dump( mode='json' )[ 'embeddings' ]
+	embeddings = embed( model=MODEL, input=sentences, options={ 'num_ctx':NUMCTX } ).model_dump( mode='json' )[ 'embeddings' ]
 	
 	# process each sentence/embeddding combination
 	item = 0

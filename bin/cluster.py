@@ -50,7 +50,7 @@ X         = PCA( n_components=components ).fit_transform( X )
 # visualize
 if components == 2 :
 
-	plt.scatter( X[ :,0 ], X[ :,1 ], s=4, c=labels )
+	plt.scatter( X[ :,0 ], X[ :,1 ], s=16, c=labels )
 	plt.scatter( centroids[ :,0 ], centroids[ :,1 ], marker='x', s=200, linewidths=3, color='red' )
 	plt.savefig( configuration( LIBRARY)/carrel/FIGURES/CLUSTERS2  )
 
@@ -58,7 +58,7 @@ elif components == 3 :
 
 	figure = plt.figure()
 	figure = figure.add_subplot( 111, projection='3d' )
-	figure.scatter( X[ :,0 ], X[ :,1 ], X[ :,2 ], s=4, c=labels )
+	figure.scatter( X[ :,0 ], X[ :,1 ], X[ :,2 ], s=16, c=labels )
 	figure.scatter( centroids[ :,0 ], centroids[ :,1 ], centroids[ :,2 ], marker='x', s=200, linewidths=3, color='red' )
 	plt.savefig( configuration( LIBRARY)/carrel/FIGURES/CLUSTERS3  )
 
