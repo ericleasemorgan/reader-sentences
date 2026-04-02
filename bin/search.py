@@ -16,9 +16,12 @@
 # June 13, 2025 - added additional caches
 # Jult  4, 2025 - changed embedder
 
+# MODEL - locusai/multi-qa-minilm-l6-cos-v1:768
+# MODEL - nomic-embed-text
+
 
 # configure
-MODEL         = 'nomic-embed-text'
+MODEL         = 'locusai/multi-qa-minilm-l6-cos-v1'
 LIBRARY       = 'localLibrary'
 SELECT        = "SELECT title, item, sentence, VEC_DISTANCE_L2(embedding, ?) AS distance FROM sentences ORDER BY distance LIMIT ?"
 DATABASE      = 'sentences.db'

@@ -42,7 +42,7 @@ projections = pca.fit_transform( X )
 if components == 2 :
 
 	# create a 2d scatter plot
-	scatter( projections[ :,0 ], projections[ :,1 ], s=2 )
+	scatter( projections[ :,0 ], projections[ :,1 ], s=4 )
 	savefig( configuration( LIBRARY)/carrel/FIGURES/REDUCED2 )
 	
 elif components == 3 :
@@ -50,7 +50,7 @@ elif components == 3 :
 	# create a 3d scatter plot; kewl
 	figure = figure()
 	figure = figure.add_subplot( 111, projection='3d' )
-	figure.scatter( projections[ :,0 ], projections[ :,1 ], projections[ :,2 ], s=2 )
+	figure.scatter( projections[ :,0 ], projections[ :,1 ], projections[ :,2 ], s=4 )
 	savefig( configuration( LIBRARY)/carrel/FIGURES/REDUCED3 )
 
 else : exit( 'Invalid value for components (%s). Call Eric.' % str( components ) )

@@ -16,16 +16,18 @@
 # April  2, 2026 - doubled the default value for num_ctx (2048) to 4096
  
 
+# MODEL:SIZE - locusai/multi-qa-minilm-l6-cos-v1:768:384
+# MODEL:SIZE - nomic-embed-text:768
+
 # configure
-MODEL    = 'nomic-embed-text'
-CREATE   = "CREATE TABLE sentences (title TEXT, item INT, sentence TEXT, vector TEXT, embedding FLOAT[768] CHECK (TYPEOF(embedding)=='blob' AND VEC_LENGTH(embedding)==768))"
-INSERT   = "INSERT INTO sentences (title, item, sentence, vector, embedding) VALUES (?, ?, ?, ?, ?)"
+MODEL    = 'locusai/multi-qa-minilm-l6-cos-v1'
+CREATE   = "CREATE TABLE sentences (title TEXT, item INT, sentence TEXT, embedding FLOAT[384] CHECK (TYPEOF(embedding)=='blob' AND VEC_LENGTH(embedding)==384))"
+INSERT   = "INSERT INTO sentences (title, item, sentence, embedding) VALUES (?, ?, ?, ?)"
 PATTERN  = '*.snt'
 LIBRARY  = 'localLibrary'
 DATABASE = 'sentences.db'
 CACHE    = 'sentences'
 VECTORS  = 'vectors.pkl'
-CONTEXT = 4096
 
 # require
 from numpy      import array
@@ -76,7 +78,7 @@ for index, file in enumerate( cache.glob( PATTERN ) ):
 	sentences = [ str( sentence ) for sentence in sentences ]
 	
 	# vectorize the sentences; cpu-intensive
-	embeddings = embed( model=MODEL, input=sentences, options={ 'num_ctx':CONTEXT } ).model_dump( mode='json' )[ 'embeddings' ]
+	embeddings = embed( model=MODEL, input=sentences ).model_dump( mode='json' )[ 'embeddings' ]
 	
 	# process each sentence/embeddding combination
 	item = 0
@@ -84,7 +86,7 @@ for index, file in enumerate( cache.glob( PATTERN ) ):
 		
 		# do the inserts
 		item += 1
-		database.execute( INSERT, [ title, item, sentence, repr( embedding ), serialize( embedding ) ] )	
+		database.execute( INSERT, [ title, item, sentence, serialize( embedding ) ] )	
 	
 # commit and close
 database.commit()
