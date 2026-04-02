@@ -13,7 +13,7 @@
 # July   4, 2025 - using a new embedder; actually moved to Ollama
 # March 30, 2026 - started caching vectors as a file
 # March 31, 2026 - started caching vectors in the database
-# April  2, 2026 - doubled the default value for num_ctx (2048) to 4096
+# April  2, 2026 - scaled back to older embedder because nomic mysteriously broke;cached vectors to a file
  
 
 # MODEL:SIZE - locusai/multi-qa-minilm-l6-cos-v1:768:384
@@ -28,7 +28,6 @@ LIBRARY  = 'localLibrary'
 DATABASE = 'sentences.db'
 CACHE    = 'sentences'
 VECTORS  = 'vectors.pkl'
-NUMCTX   = 4096
 
 # require
 from numpy      import array
@@ -79,7 +78,7 @@ for index, file in enumerate( cache.glob( PATTERN ) ):
 	sentences = [ str( sentence ) for sentence in sentences ]
 	
 	# vectorize the sentences; cpu-intensive
-	embeddings = embed( model=MODEL, input=sentences, options={ 'num_ctx':NUMCTX } ).model_dump( mode='json' )[ 'embeddings' ]
+	embeddings = embed( model=MODEL, input=sentences ).model_dump( mode='json' )[ 'embeddings' ]
 	
 	# process each sentence/embeddding combination
 	item = 0
