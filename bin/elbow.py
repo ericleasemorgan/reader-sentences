@@ -9,19 +9,26 @@
 
 
 # configure
-CACHE      = 'etc'
 VECTORS    = 'vectors.pkl'
 RANGE      = 16
 COMPONENTS = 2
+LIBRARY    = 'localLibrary'
+ELBOW      = 'vectors-elbow.png'
 
 from matplotlib.pyplot     import plot, grid, show, savefig 
 from pathlib               import Path
 from pickle                import load
 from sklearn.cluster       import KMeans
 from sklearn.decomposition import PCA
+from rdr                   import configuration, ETC, FIGURES
+from sys                   import argv, exit
+
+# get input
+if len( argv ) != 2 : exit( 'Usage: ' + argv[ 0 ] + " <carrel>" )
+carrel = argv[ 1 ]
 
 # load the previously cached set of vectors
-with open( Path( CACHE )/VECTORS, 'rb' ) as handle: X = load( handle )
+with open( configuration( LIBRARY)/carrel/ETC/VECTORS, 'rb' ) as handle: X = load( handle )
 
 # initialize PCA and fit the vectors all in one go
 X = PCA( n_components=COMPONENTS ).fit_transform( X )
@@ -39,5 +46,5 @@ plot( range( 1, RANGE ), inertia, marker='o' )
 grid( True )
 
 # output and done
-savefig( '/home/emorgan/pracrice.png' )
+savefig( configuration( LIBRARY)/carrel/FIGURES/ELBOW )
 exit()
