@@ -13,7 +13,7 @@
 MODEL        = 'deepseek-v3.1:671b-cloud'
 CONTEXT      = './etc/cached-results.txt'
 SYSTEMPROMPT = './etc/system-prompt.txt'
-PROMPT       = 'Summarize the following context: %s'
+PROMPT       = 'Summarize the following context: %s; do not output the result as mark down.'
 
 # require
 from ollama import generate

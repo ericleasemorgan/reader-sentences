@@ -5,4 +5,5 @@ etc/cached-cites.txt
 etc/cached-carrel.txt
 etc/system-prompt.txt
 etc/vectors.pkl
+etc/results.md
 __pycache__
