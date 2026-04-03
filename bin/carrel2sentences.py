@@ -8,6 +8,7 @@
 # May  26, 2025 - trying yet again
 # June 18, 2025 - trapped file too big
 # July 17, 2025 - resized model if file too big
+# April 2, 2026 - skipping over sentences longer than MAXIMUM
 
 
 # configure
@@ -17,6 +18,7 @@ MODEL     = 'en_core_web_sm'
 CACHE     = 'sentences'
 EXTENSION = '.snt'
 LIBRARY   = 'localLibrary'
+MAXIMUM   = 1028
 
 # require
 from multiprocessing import Pool
@@ -54,6 +56,7 @@ def file2sentences( file, nlp, cache ) :
 	sentences = [ sub( ' +', ' ', sentence )    for sentence in sentences ]
 	sentences = [ sub( '^ ', '', sentence )     for sentence in sentences ]	
 	sentences = [ sub( ' $', '', sentence )     for sentence in sentences ]	
+	sentences = [ sentence for sentence in sentences if len( sentence ) < MAXIMUM ]	
 
 	# process each sentence; create a set of records
 	records = []
